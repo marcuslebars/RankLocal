@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "@/assets/ranklocal_logo.png";
 
 const Footer = () => (
   <footer className="bg-dark-section border-t border-border/10">
