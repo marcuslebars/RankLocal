@@ -7,13 +7,8 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand */}
         <div className="md:col-span-1">
-          <Link to="/" className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="font-display font-extrabold text-primary-foreground text-sm">R</span>
-            </div>
-            <span className="font-display font-bold text-lg">
-              Rank<span className="text-primary">Local</span>
-            </span>
+          <Link to="/" className="flex items-center mb-4">
+            <img src={logo} alt="RankLocal" className="h-7" />
           </Link>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Your local growth partner. We help small businesses get found, generate leads, and build lasting digital presence.
