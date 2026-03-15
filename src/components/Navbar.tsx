@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/ranklocal_logo.png";
 
 const navLinks = [
   { label: "Services", href: "/services" },
@@ -18,13 +19,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-dark/95 backdrop-blur-md border-b border-border/10">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="font-display font-extrabold text-primary-foreground text-sm">R</span>
-          </div>
-          <span className="font-display font-bold text-lg text-dark-foreground">
-            Rank<span className="text-primary">Local</span>
-          </span>
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="RankLocal" className="h-7" />
         </Link>
 
         {/* Desktop Nav */}
