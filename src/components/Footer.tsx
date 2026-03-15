@@ -8,7 +8,7 @@ const Footer = () => (
         {/* Brand */}
         <div className="md:col-span-1">
           <Link to="/" className="flex items-center mb-4">
-            <img src={logo} alt="RankLocal" className="h-10" />
+            <img src={logo} alt="RankLocal" className="h-12" />
           </Link>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Your local growth partner. We help small businesses get found, generate leads, and build lasting digital presence.

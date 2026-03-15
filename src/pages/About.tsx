@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
-import { ArrowRight, Target, Heart, Lightbulb, Users, Zap, Shield } from "lucide-react";
+import { ArrowRight, Target, Heart, Lightbulb, Users, Zap, Shield, Sparkles } from "lucide-react";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
-const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } };
+const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 
 const values = [
   { icon: Target, title: "Traction Over Tactics", desc: "We don't chase trends. Every action is tied to a measurable growth outcome for your business." },
@@ -19,12 +19,17 @@ const values = [
 const About = () => (
   <main>
     {/* Hero */}
-    <section className="bg-dark-section pt-28 pb-16 lg:pt-36 lg:pb-20">
-      <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl">
-          <p className="text-xs uppercase tracking-widest text-primary font-semibold mb-3">About RankLocal</p>
-          <h1 className="font-display font-extrabold text-4xl md:text-5xl mb-6">We help local businesses<br />build real traction.</h1>
-          <p className="text-dark-foreground/60 text-lg leading-relaxed">
+    <section className="bg-dark-section relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-24">
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60V0h60' fill='none' stroke='white' stroke-width='0.4'/%3E%3C/svg%3E\")" }} />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[150px]" />
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            <Sparkles size={14} className="text-primary" />
+            <span className="text-xs font-medium text-primary tracking-wide">About RankLocal</span>
+          </div>
+          <h1 className="font-display font-extrabold text-4xl md:text-5xl lg:text-[3.25rem] leading-[1.1] mb-6">We help local businesses<br />build real traction.</h1>
+          <p className="text-dark-foreground/55 text-lg leading-relaxed max-w-xl">
             RankLocal was founded on a simple observation: most local businesses are underserved by marketing agencies. They get cookie-cutter strategies, bloated retainers, and reports nobody reads. We're here to change that.
           </p>
         </motion.div>
@@ -33,28 +38,28 @@ const About = () => (
 
     {/* Story */}
     <SectionWrapper>
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
         <div>
-          <p className="text-xs uppercase tracking-widest text-primary font-semibold mb-3">Our Story</p>
-          <h2 className="font-display font-extrabold text-3xl mb-6">Born from frustration with the status quo.</h2>
-          <div className="space-y-4 text-muted-foreground leading-relaxed">
+          <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold mb-3">Our Story</p>
+          <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-6">Born from frustration with the status quo.</h2>
+          <div className="space-y-5 text-muted-foreground leading-relaxed text-base">
             <p>After years of watching small businesses get burned by agencies that overpromised and underdelivered, we built RankLocal to be the agency we wished existed.</p>
             <p>We're a small, focused team based in Toronto. We work with local businesses across Canada — from plumbers and dentists to fitness studios and restaurants — helping them build the digital presence they need to compete and grow.</p>
             <p>We don't do everything for everyone. We do a few things exceptionally well: Local SEO, web design, digital advertising, and social media. And we do it with radical transparency, clear communication, and a genuine obsession with results.</p>
           </div>
         </div>
-        <div className="bg-card rounded-xl p-8 border border-border">
-          <h3 className="font-display font-bold text-xl mb-6">Our Approach</h3>
-          <div className="space-y-6">
+        <div className="bg-card rounded-2xl p-8 md:p-10 border border-border">
+          <h3 className="font-display font-bold text-xl mb-8">Our Approach</h3>
+          <div className="space-y-8">
             {[
               { num: "01", text: "Understand your business, market, and goals deeply before recommending anything." },
               { num: "02", text: "Build a focused growth plan with clear priorities and timelines." },
               { num: "03", text: "Execute fast, communicate often, and optimize based on real data." },
               { num: "04", text: "Report on outcomes that matter — leads, calls, revenue — not vanity metrics." },
             ].map((item) => (
-              <div key={item.num} className="flex gap-4">
-                <span className="font-display font-extrabold text-2xl text-primary/20">{item.num}</span>
-                <p className="text-sm text-muted-foreground leading-relaxed pt-1">{item.text}</p>
+              <div key={item.num} className="flex gap-5">
+                <span className="font-display font-extrabold text-3xl text-primary/15">{item.num}</span>
+                <p className="text-sm text-muted-foreground leading-relaxed pt-2">{item.text}</p>
               </div>
             ))}
           </div>
@@ -64,31 +69,46 @@ const About = () => (
 
     {/* Values */}
     <SectionWrapper dark>
-      <div className="text-center mb-14">
-        <p className="text-xs uppercase tracking-widest text-primary font-semibold mb-3">What We Believe</p>
-        <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-4">Principles That Guide Everything We Do</h2>
+      <div className="text-center mb-16">
+        <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold mb-3">What We Believe</p>
+        <h2 className="font-display font-extrabold text-3xl md:text-4xl lg:text-[2.75rem] mb-5">Principles That Guide Everything We Do</h2>
+        <p className="text-dark-foreground/50 max-w-lg mx-auto">These aren't slogans on a wall. They're how we make decisions, build strategies, and serve our clients every day.</p>
       </div>
       <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {values.map((v) => (
-          <motion.div key={v.title} variants={fadeUp} className="bg-muted/5 border border-border/10 rounded-xl p-6">
-            <v.icon size={22} className="text-primary mb-4" />
-            <h3 className="font-display font-bold mb-2">{v.title}</h3>
-            <p className="text-sm text-dark-foreground/50 leading-relaxed">{v.desc}</p>
+          <motion.div key={v.title} variants={fadeUp} className="glass-card rounded-2xl p-7 hover:border-primary/20 transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
+              <v.icon size={22} className="text-primary" />
+            </div>
+            <h3 className="font-display font-bold text-base mb-2">{v.title}</h3>
+            <p className="text-sm text-dark-foreground/45 leading-relaxed">{v.desc}</p>
           </motion.div>
         ))}
       </motion.div>
     </SectionWrapper>
 
     {/* CTA */}
-    <SectionWrapper className="text-center">
-      <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5">Want to work with us?</h2>
-      <p className="text-muted-foreground max-w-lg mx-auto mb-8">
-        We keep our client roster lean so we can deliver exceptional work. If you're serious about growing your local business, let's talk.
-      </p>
-      <Button variant="hero" size="lg" asChild>
-        <Link to="/contact">Book a Strategy Call <ArrowRight size={16} /></Link>
-      </Button>
-    </SectionWrapper>
+    <section className="bg-light-section py-24 lg:py-32">
+      <div className="container mx-auto px-4 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative bg-dark rounded-3xl p-12 md:p-20 text-center overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
+          <div className="relative z-10">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5 text-dark-foreground">Want to work with us?</h2>
+            <p className="text-dark-foreground/50 max-w-lg mx-auto mb-10 text-base leading-relaxed">
+              We keep our client roster lean so we can deliver exceptional work. If you're serious about growing your local business, let's talk.
+            </p>
+            <Button variant="hero" size="lg" asChild>
+              <Link to="/contact">Book a Strategy Call <ArrowRight size={16} /></Link>
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   </main>
 );
 
