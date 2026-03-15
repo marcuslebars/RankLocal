@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Search, BarChart3, Globe, Megaphone, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
-const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } };
+const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 
 const servicesData = [
   {
