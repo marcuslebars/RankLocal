@@ -359,8 +359,8 @@ const Pricing = () => (
           whileInView="show"
           viewport={{ once: true }}
         >
-          <motion.div variants={fadeUp} className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
+          <motion.div variants={fadeUp} className="mb-12 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <MapPin size={20} className="text-primary" />
               </div>
@@ -368,12 +368,12 @@ const Pricing = () => (
                 Local Launch Kit
               </h2>
             </div>
-            <p className="text-muted-foreground max-w-lg text-base leading-relaxed">
+            <p className="text-muted-foreground max-w-lg mx-auto text-base leading-relaxed">
               Get your local presence set up right from day one. Perfect for
               businesses just getting started with local SEO.
             </p>
           </motion.div>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl">
+          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {localLaunchTiers.map((tier) => (
               <TierCard key={tier.name} {...tier} />
             ))}
@@ -391,8 +391,8 @@ const Pricing = () => (
           whileInView="show"
           viewport={{ once: true }}
         >
-          <motion.div variants={fadeUp} className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
+          <motion.div variants={fadeUp} className="mb-12 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Globe size={20} className="text-primary" />
               </div>
@@ -400,12 +400,12 @@ const Pricing = () => (
                 Website Packages
               </h2>
             </div>
-            <p className="text-dark-foreground/55 max-w-lg text-base leading-relaxed">
+            <p className="text-dark-foreground/55 max-w-lg mx-auto text-base leading-relaxed">
               Fast, modern websites built to convert visitors into customers.
               SEO-ready from launch.
             </p>
           </motion.div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {websiteTiers.map((tier) => (
               <TierCard key={tier.name} {...tier} />
             ))}
@@ -423,8 +423,8 @@ const Pricing = () => (
           whileInView="show"
           viewport={{ once: true }}
         >
-          <motion.div variants={fadeUp} className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
+          <motion.div variants={fadeUp} className="mb-12 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Zap size={20} className="text-primary" />
               </div>
@@ -432,12 +432,12 @@ const Pricing = () => (
                 Automation Setup
               </h2>
             </div>
-            <p className="text-muted-foreground max-w-lg text-base leading-relaxed">
+            <p className="text-muted-foreground max-w-lg mx-auto text-base leading-relaxed">
               Eliminate manual busywork. Automate lead capture, follow-ups, and
               operations so nothing falls through the cracks.
             </p>
           </motion.div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {automationTiers.map((tier) => (
               <TierCard key={tier.name} {...tier} />
             ))}
