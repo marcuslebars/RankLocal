@@ -247,7 +247,7 @@ const TierCard = ({
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
-    className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 ${
+    className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 text-card-foreground ${
       highlighted
         ? "border-2 border-primary bg-primary/[0.04] shadow-lg shadow-primary/5 scale-[1.02]"
         : "border border-border bg-card hover:border-primary/30"
@@ -287,7 +287,7 @@ const TierCard = ({
       ))}
     </ul>
     <Button
-      variant={highlighted ? "hero" : "hero-outline"}
+      variant={highlighted ? "hero" : "hero-dark"}
       size="default"
       className="w-full"
       asChild
