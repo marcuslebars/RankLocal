@@ -7,6 +7,7 @@ import logo from "@/assets/ranklocal_logo.png";
 
 const navLinks = [
   { label: "Services", href: "/services" },
+  { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Contact", href: "/contact" },
