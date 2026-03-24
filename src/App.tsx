@@ -10,6 +10,7 @@ import Index from "./pages/Index.tsx";
 import Services from "./pages/Services.tsx";
 import About from "./pages/About.tsx";
 import CaseStudies from "./pages/CaseStudies.tsx";
+import CaseStudyA1MarineCare from "./pages/CaseStudyA1MarineCare.tsx";
 import Contact from "./pages/Contact.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
           <Route path="/case-studies" element={<CaseStudies />} />
+          <Route path="/case-study-a1-marine-care" element={<CaseStudyA1MarineCare />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="*" element={<NotFound />} />
