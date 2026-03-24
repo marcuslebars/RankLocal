@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin, TrendingUp, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowRight, TrendingUp, CheckCircle2, Sparkles, AlertCircle, ExternalLink } from "lucide-react";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
@@ -39,10 +39,11 @@ const executionItems = [
 ];
 
 const resultMetrics = [
-  { label: "#1 Rankings", value: "100km+ Radius", icon: "🎯" },
-  { label: "Local Visibility", value: "Dominant Presence", icon: "📍" },
-  { label: "Inbound Leads", value: "Consistent Pipeline", icon: "📞" },
-  { label: "First 7 Months", value: "~$300,000 Revenue", icon: "💰" },
+  { label: "#1 visibility", value: "Core Service Areas", icon: "🎯" },
+  { label: "Google Maps", value: "Strong Presence", icon: "📍" },
+  { label: "Coverage", value: "~100km Radius", icon: "🗺️" },
+  { label: "Inbound Leads", value: "Consistent from Search", icon: "📞" },
+  { label: "First 7 Months", value: "~$300,000 Generated", icon: "💰", highlight: true },
 ];
 
 const timelineItems = [
@@ -61,23 +62,23 @@ const whyMostFail = [
 ];
 
 const CaseStudyA1MarineCare = () => (
-  <main>
+  <main className="selection:bg-[#00FFFF]/30">
     {/* SECTION 1 — HERO */}
     <section className="bg-dark-section relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-24">
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60V0h60' fill='none' stroke='white' stroke-width='0.4'/%3E%3C/svg%3E\")" }} />
-      <div className="absolute top-20 left-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute top-20 left-0 w-[500px] h-[500px] bg-[#00FFFF]/[0.04] rounded-full blur-[150px]" />
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Sparkles size={14} className="text-primary" />
-            <span className="text-xs font-medium text-primary tracking-wide">Founder-Built Proof</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00FFFF]/10 border border-[#00FFFF]/20 mb-6">
+            <Sparkles size={14} className="text-[#00FFFF]" />
+            <span className="text-xs font-medium text-[#00FFFF] tracking-wide uppercase">A1 Marine Care Case Study</span>
           </div>
           <h1 className="font-display font-extrabold text-4xl md:text-5xl lg:text-[3.25rem] leading-[1.1] mb-6">How We Ranked #1 Across Georgian Bay</h1>
           <p className="text-dark-foreground/60 text-lg leading-relaxed max-w-2xl mb-10">
-            We didn't start with clients. We built and ranked our own business first. In its first year (2025), A1 Marine Care grew from zero to approximately <strong>$300,000 in revenue in just 7 months</strong> — driven by dominant local search rankings.
+            We didn't start with clients. We built and ranked our own business first. In its first year (2025), A1 Marine Care grew from zero to approximately <strong className="text-[#00FFFF]">$300,000 in revenue in just 7 months</strong> — driven by dominant local search rankings.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button variant="hero" size="lg" asChild>
+            <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
               <Link to="/contact">Apply the System <ArrowRight size={16} /></Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
@@ -87,41 +88,28 @@ const CaseStudyA1MarineCare = () => (
               <Link to="/contact">Start Your Project</Link>
             </Button>
           </div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="mt-12 pt-8 border-t border-white/10"
+          >
+            <p className="text-dark-foreground/40 text-sm font-medium uppercase tracking-widest flex items-center gap-2">
+              <TrendingUp size={14} className="text-[#00FFFF]" />
+              This is the exact system we now apply to other local businesses.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>
 
-    {/* PROOF CALLOUT — Built in Year One */}
-    <section className="bg-light-section py-12 lg:py-16">
-      <div className="container mx-auto px-4 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="grid md:grid-cols-4 gap-6"
-        >
-          <div className="rounded-2xl bg-card border-2 border-primary/20 p-6 lg:p-8 text-center">
-            <div className="text-4xl mb-3">🚀</div>
-            <p className="font-display font-semibold text-lg mb-2">Built From Scratch</p>
-            <p className="text-muted-foreground text-sm">First year in business (2025)</p>
-          </div>
-          <div className="rounded-2xl bg-card border-2 border-primary/20 p-6 lg:p-8 text-center">
-            <div className="text-4xl mb-3">⏱️</div>
-            <p className="font-display font-semibold text-lg mb-2">7 Months</p>
-            <p className="text-muted-foreground text-sm">Time to ~$300,000 revenue</p>
-          </div>
-          <div className="rounded-2xl bg-card border-2 border-primary/20 p-6 lg:p-8 text-center">
-            <div className="text-4xl mb-3">📊</div>
-            <p className="font-display font-semibold text-lg mb-2">~$300,000</p>
-            <p className="text-muted-foreground text-sm">Revenue generated in first 7 months</p>
-          </div>
-          <div className="rounded-2xl bg-card border-2 border-primary/20 p-6 lg:p-8 text-center">
-            <div className="text-4xl mb-3">🎯</div>
-            <p className="font-display font-semibold text-lg mb-2">Driven by Rankings</p>
-            <p className="text-muted-foreground text-sm">Local search visibility</p>
-          </div>
-        </motion.div>
+    {/* REVENUE CONNECTION LINE */}
+    <section className="bg-[#2b2b2b] py-8 border-y border-white/5">
+      <div className="container mx-auto px-4 text-center">
+        <p className="text-dark-foreground/80 text-lg md:text-xl font-medium">
+          These rankings didn't just improve visibility — they <span className="text-[#00FFFF]">directly drove revenue growth</span> in the first year.
+        </p>
       </div>
     </section>
 
@@ -132,7 +120,7 @@ const CaseStudyA1MarineCare = () => (
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <p className="text-muted-foreground leading-relaxed text-base mb-6">
-              A1 Marine Care was a brand new business with zero online presence. Despite offering quality services, the business wasn't showing up where potential customers were searching.
+              A1 Marine Care was a brand new business with zero online presence and no prior SEO authority. Despite offering quality services, the business was invisible where potential customers were searching.
             </p>
             <p className="text-muted-foreground leading-relaxed text-base">
               Without local search visibility, growth was limited to word-of-mouth. Every day without ranking meant losing customers to competitors who were already visible.
@@ -177,7 +165,7 @@ const CaseStudyA1MarineCare = () => (
           {strategyItems.map((item, i) => (
             <motion.div key={i} variants={fadeUp} className="glass-card rounded-2xl p-6 lg:p-8 border border-border/10">
               <div className="flex items-start gap-3 mb-4">
-                <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-1" />
+                <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-1" />
                 <h3 className="font-display font-semibold text-lg text-dark-foreground">{item.title}</h3>
               </div>
               <p className="text-dark-foreground/60 text-sm leading-relaxed">{item.description}</p>
@@ -199,8 +187,8 @@ const CaseStudyA1MarineCare = () => (
             <div className="space-y-3">
               {executionItems.map((item, i) => (
                 <div key={i} className="flex gap-3 items-start">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-semibold text-primary">{i + 1}</span>
+                  <div className="w-6 h-6 rounded-full bg-[#00FFFF]/10 border border-[#00FFFF]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-semibold text-[#00FFFF]">{i + 1}</span>
                   </div>
                   <span className="text-muted-foreground text-base">{item}</span>
                 </div>
@@ -208,7 +196,7 @@ const CaseStudyA1MarineCare = () => (
             </div>
           </div>
           <div className="relative rounded-2xl bg-card border border-border p-8 lg:p-12 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00FFFF]/5 to-transparent" />
             <div className="relative z-10">
               <div className="text-center">
                 <div className="text-5xl mb-4">🎯</div>
@@ -232,12 +220,12 @@ const CaseStudyA1MarineCare = () => (
             The system worked. Here's what happened when we applied it to a real business in a competitive local market.
           </p>
         </motion.div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {resultMetrics.map((metric, i) => (
-            <motion.div key={i} variants={fadeUp} className="glass-card rounded-2xl p-8 text-center border border-border/10">
-              <div className="text-4xl mb-3">{metric.icon}</div>
-              <p className="font-display font-extrabold text-2xl text-primary mb-2">{metric.value}</p>
-              <p className="text-xs text-dark-foreground/60 uppercase tracking-wider">{metric.label}</p>
+            <motion.div key={i} variants={fadeUp} className={`glass-card rounded-2xl p-6 text-center border ${metric.highlight ? 'border-[#00FFFF]/40 bg-[#00FFFF]/5' : 'border-border/10'}`}>
+              <div className="text-3xl mb-3">{metric.icon}</div>
+              <p className={`font-display font-extrabold text-xl ${metric.highlight ? 'text-[#00FFFF]' : 'text-primary'} mb-1`}>{metric.value}</p>
+              <p className="text-[10px] text-dark-foreground/60 uppercase tracking-wider font-bold">{metric.label}</p>
             </motion.div>
           ))}
         </div>
@@ -251,40 +239,54 @@ const CaseStudyA1MarineCare = () => (
         <div className="grid md:grid-cols-2 gap-8 mb-10">
           <div className="space-y-6">
             <div className="flex gap-4">
-              <AlertCircle className="text-primary flex-shrink-0 mt-1" size={20} />
+              <AlertCircle className="text-[#00FFFF] flex-shrink-0 mt-1" size={20} />
               <div>
                 <h3 className="font-display font-semibold text-lg mb-2">If you're not ranking locally, you're invisible</h3>
                 <p className="text-muted-foreground text-sm">Potential customers are searching for your services right now. If you're not showing up, they're finding your competitors.</p>
               </div>
             </div>
             <div className="flex gap-4">
-              <AlertCircle className="text-primary flex-shrink-0 mt-1" size={20} />
+              <AlertCircle className="text-[#00FFFF] flex-shrink-0 mt-1" size={20} />
               <div>
-                <h3 className="font-display font-semibold text-lg mb-2">Competitors are capturing your potential customers</h3>
+                <h3 className="font-display font-semibold text-lg mb-2">Your competitors are capturing your potential customers</h3>
                 <p className="text-muted-foreground text-sm">Every day without visibility is revenue lost to businesses that are already ranking.</p>
               </div>
             </div>
             <div className="flex gap-4">
-              <AlertCircle className="text-primary flex-shrink-0 mt-1" size={20} />
+              <AlertCircle className="text-[#00FFFF] flex-shrink-0 mt-1" size={20} />
               <div>
-                <h3 className="font-display font-semibold text-lg mb-2">Strong local rankings directly impact revenue</h3>
+                <h3 className="font-display font-semibold text-lg mb-2">Local rankings directly impact revenue</h3>
                 <p className="text-muted-foreground text-sm">As A1 Marine Care proved, dominant local search visibility creates a predictable flow of inbound leads and sales.</p>
               </div>
             </div>
+            <div className="flex gap-4">
+              <AlertCircle className="text-[#00FFFF] flex-shrink-0 mt-1" size={20} />
+              <div>
+                <h3 className="font-display font-semibold text-lg mb-2">Strong visibility creates consistent inbound leads</h3>
+                <p className="text-muted-foreground text-sm">Stop chasing leads and start attracting them through #1 placement for core service keywords.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <AlertCircle className="text-[#00FFFF] flex-shrink-0 mt-1" size={20} />
+              <div>
+                <h3 className="font-display font-semibold text-lg mb-2">This system gives you a competitive advantage</h3>
+                <p className="text-muted-foreground text-sm">Dominate your local market with a proven, repeatable system that works in the real world.</p>
+              </div>
+            </div>
           </div>
-          <div className="relative rounded-2xl bg-gradient-to-br from-primary/5 to-primary/[0.02] border border-primary/10 p-8 lg:p-10 flex flex-col justify-center">
+          <div className="relative rounded-2xl bg-gradient-to-br from-[#00FFFF]/5 to-primary/[0.02] border border-[#00FFFF]/10 p-8 lg:p-10 flex flex-col justify-center">
             <div className="text-center">
               <div className="text-5xl mb-4">💡</div>
               <h3 className="font-display font-semibold text-xl mb-4">The Connection</h3>
               <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                Rankings → Visibility → Leads → Revenue
+                LOCAL RANKINGS → VISIBILITY → LEADS → REVENUE
               </p>
               <p className="text-muted-foreground text-xs">This isn't theory. It's what we built and proved with A1 Marine Care.</p>
             </div>
           </div>
         </div>
         <div className="text-center">
-          <Button variant="hero" size="lg" asChild>
+          <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
             <Link to="/contact">Apply This System <ArrowRight size={16} /></Link>
           </Button>
         </div>
@@ -303,7 +305,7 @@ const CaseStudyA1MarineCare = () => (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {timelineItems.map((item, i) => (
             <motion.div key={i} variants={fadeUp} className="glass-card rounded-2xl p-6 lg:p-8 border border-border/10">
-              <p className="text-xs text-primary uppercase tracking-wider font-semibold mb-2">{item.period}</p>
+              <p className="text-xs text-[#00FFFF] uppercase tracking-wider font-semibold mb-2">{item.period}</p>
               <h3 className="font-display font-semibold text-lg text-dark-foreground mb-3">{item.milestone}</h3>
               <p className="text-dark-foreground/60 text-sm leading-relaxed">{item.description}</p>
             </motion.div>
@@ -324,7 +326,7 @@ const CaseStudyA1MarineCare = () => (
             </div>
           ))}
         </div>
-        <div className="relative rounded-2xl bg-gradient-to-r from-primary/5 to-primary/[0.02] border border-primary/10 p-8 lg:p-12 text-center">
+        <div className="relative rounded-2xl bg-gradient-to-r from-[#00FFFF]/5 to-primary/[0.02] border border-[#00FFFF]/10 p-8 lg:p-12 text-center">
           <h3 className="font-display font-semibold text-2xl mb-3">This system was built to solve all of that.</h3>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             A1 Marine Care succeeded because we applied a structured, repeatable system — not random tactics. The same system is now available to other local businesses.
@@ -342,7 +344,7 @@ const CaseStudyA1MarineCare = () => (
             This system was built and tested on a real business, in a competitive local market. We didn't rely on best practices or industry trends. We built what worked, measured the results, and refined the approach based on real data.
           </p>
           <p className="text-dark-foreground/70 text-lg leading-relaxed">
-            A1 Marine Care went from zero to approximately $300,000 in revenue in its first 7 months, driven by dominant local search rankings. Everything RankLocal offers is based on what actually worked.
+            A1 Marine Care went from zero to approximately <span className="text-[#00FFFF] font-bold">$300,000 in revenue in its first 7 months</span>, driven by dominant local search rankings. Everything RankLocal offers is based on what actually worked.
           </p>
           <p className="text-dark-foreground/70 text-lg leading-relaxed">
             Now we help other businesses apply the same system to their markets. The results speak for themselves.
@@ -360,14 +362,14 @@ const CaseStudyA1MarineCare = () => (
           viewport={{ once: true }}
           className="relative bg-dark rounded-3xl p-12 md:p-20 text-center overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00FFFF]/[0.06] rounded-full blur-[120px]" />
           <div className="relative z-10">
             <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5 text-dark-foreground">Stop Losing Local Customers to Competitors</h2>
             <p className="text-dark-foreground/50 max-w-lg mx-auto mb-10 text-base leading-relaxed">
-              If your business isn't ranking locally, you're losing visibility, leads, and revenue every day. Apply the same system that drove real growth in a real business.
+              If you're not ranking locally, your competitors are taking your leads every day. Apply the same system that drove real growth in a real business.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="hero" size="lg" asChild>
+              <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
                 <Link to="/contact">Apply the System <ArrowRight size={16} /></Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>
