@@ -535,28 +535,28 @@ const Pricing = () => (
     </section>
 
     {/* ── Final CTA ── */}
-    <section className="bg-dark-section py-24 lg:py-32">
+    <section className="bg-light-section py-24 lg:py-32">
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-card rounded-3xl p-12 md:p-20 text-center overflow-hidden border border-border/50"
+          className="relative bg-white rounded-3xl p-12 md:p-20 text-center overflow-hidden border border-border/30"
         >
           <div
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40V0h40' fill='none' stroke='white' stroke-width='0.5'/%3E%3C/svg%3E\")",
+                "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40V0h40' fill='none' stroke='%23000' stroke-width='0.5'/%3E%3C/svg%3E\")",
             }}
           />
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[120px]" />
           <div className="relative z-10">
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5 text-foreground">
               Ready to get started?
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto mb-10 text-base leading-relaxed">
-              Start with the Local Launch Kit — our proven entry point for local businesses. Purchase online, complete onboarding, and we’ll begin within 24 hours.
+              Start with the Local Launch Kit — our proven entry point for local businesses. Purchase online, complete onboarding, and we'll begin within 24 hours.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button variant="hero" size="lg" asChild>
@@ -564,7 +564,7 @@ const Pricing = () => (
                   Get Started <ArrowRight size={16} />
                 </Link>
               </Button>
-              <Button variant="hero-outline" size="lg" asChild>
+              <Button variant="hero-dark" size="lg" asChild>
                 <Link to="/contact">
                   Book Strategy Call
                 </Link>
