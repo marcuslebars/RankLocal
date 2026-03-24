@@ -100,6 +100,13 @@ const Services = () => (
                   ))}
                 </ul>
               </motion.div>
+              <motion.div variants={fadeUp} className={`mt-6 rounded-2xl p-6 border-2 border-primary/20 bg-primary/[0.03]`}>
+                <p className="font-display font-semibold text-sm mb-2">Start with the Local Launch Kit</p>
+                <p className="text-xs text-muted-foreground mb-4">The fastest way to get your local presence built right. One-time investment, proven system.</p>
+                <Button variant="hero" size="sm" asChild>
+                  <Link to="/local-launch-kit">Get Started <ArrowRight size={14} /></Link>
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
         </SectionWrapper>

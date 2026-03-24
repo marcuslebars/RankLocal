@@ -407,14 +407,17 @@ const FinalCTA = () => (
             Ready to grow your<br /><span className="text-gradient-orange">local business?</span>
           </h2>
           <p className="text-dark-foreground/50 max-w-lg mx-auto mb-10 text-base leading-relaxed">
-            Book a free strategy call. We'll audit your current presence and map out a plan to help you get more visibility, leads, and customers.
+            Start with the Local Launch Kit — the same system that generated ~$300,000 for A1 Marine Care in its first 7 months. No sales call required.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button variant="hero" size="lg" asChild>
-              <Link to="/contact">Book a Strategy Call <ArrowRight size={16} /></Link>
+              <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
-              <Link to="/case-studies">See Our Work</Link>
+              <Link to="/case-study-a1-marine-care">View Case Study</Link>
+            </Button>
+            <Button variant="hero-outline" size="lg" asChild>
+              <Link to="/contact">Book a Strategy Call</Link>
             </Button>
           </div>
         </div>

@@ -4,7 +4,7 @@ import logo from "@/assets/ranklocal_logo.png";
 const Footer = () => (
   <footer className="bg-dark-section border-t border-border/10">
     <div className="container mx-auto px-4 lg:px-8 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
         {/* Brand */}
         <div className="md:col-span-1">
           <Link to="/" className="flex items-center mb-4">
@@ -41,6 +41,33 @@ const Footer = () => (
                 <Link to={link.href} className="text-sm text-dark-foreground/70 hover:text-primary transition-colors">{link.label}</Link>
               </li>
             ))}
+          </ul>
+        </div>
+
+        {/* Get Started */}
+        <div>
+          <h4 className="font-display font-semibold text-sm mb-4 uppercase tracking-wider text-muted-foreground">Get Started</h4>
+          <ul className="space-y-3">
+            <li>
+              <Link to="/local-launch-kit" className="text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
+                Local Launch Kit — $997
+              </Link>
+            </li>
+            <li>
+              <Link to="/local-launch-kit" className="text-sm text-dark-foreground/70 hover:text-primary transition-colors">
+                How It Works
+              </Link>
+            </li>
+            <li>
+              <Link to="/case-study-a1-marine-care" className="text-sm text-dark-foreground/70 hover:text-primary transition-colors">
+                View Case Study
+              </Link>
+            </li>
+            <li>
+              <Link to="/onboarding" className="text-sm text-dark-foreground/70 hover:text-primary transition-colors">
+                Onboarding
+              </Link>
+            </li>
           </ul>
         </div>
 

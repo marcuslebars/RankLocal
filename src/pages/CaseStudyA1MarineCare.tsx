@@ -79,13 +79,13 @@ const CaseStudyA1MarineCare = () => (
           </p>
           <div className="flex flex-wrap gap-4">
             <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-              <Link to="/contact">Apply the System <ArrowRight size={16} /></Link>
+              <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
+            </Button>
+            <Button variant="hero-outline" size="lg" asChild>
+              <Link to="/local-launch-kit">Apply the System</Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
               <Link to="/pricing">View Pricing</Link>
-            </Button>
-            <Button variant="hero-outline" size="lg" asChild>
-              <Link to="/contact">Start Your Project</Link>
             </Button>
           </div>
           
@@ -285,9 +285,12 @@ const CaseStudyA1MarineCare = () => (
             </div>
           </div>
         </div>
-        <div className="text-center">
+        <div className="text-center flex flex-wrap justify-center gap-4">
           <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-            <Link to="/contact">Apply This System <ArrowRight size={16} /></Link>
+            <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
+          </Button>
+          <Button variant="hero-outline" size="lg" asChild>
+            <Link to="/local-launch-kit">Apply the System</Link>
           </Button>
         </div>
       </motion.div>
@@ -370,13 +373,13 @@ const CaseStudyA1MarineCare = () => (
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-                <Link to="/contact">Apply the System <ArrowRight size={16} /></Link>
+                <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
+              </Button>
+              <Button variant="hero-outline" size="lg" asChild>
+                <Link to="/local-launch-kit">Apply the System</Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>
                 <Link to="/pricing">View Pricing</Link>
-              </Button>
-              <Button variant="hero-outline" size="lg" asChild>
-                <Link to="/contact">Start Your Project</Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>
                 <Link to="/contact">Book Strategy Call</Link>

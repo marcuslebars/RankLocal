@@ -2,7 +2,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
-import { CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
+
+// Webhook URL for onboarding form submissions.
+// Set VITE_ONBOARDING_WEBHOOK_URL in your .env file.
+// Compatible with Formspree, Make, n8n, Zapier, or any POST endpoint.
+const WEBHOOK_URL = import.meta.env.VITE_ONBOARDING_WEBHOOK_URL || "";
+
+const inputClass =
+  "w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors";
 
 const Onboarding = () => {
   const [formData, setFormData] = useState({
@@ -20,34 +28,45 @@ const Onboarding = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
-      // Send data to backend or webhook
-      // For now, we'll simulate a successful submission
-      const response = await fetch("/api/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      }).catch(() => {
-        // Fallback: If no backend, just mark as submitted
-        return { ok: true };
-      });
+      if (WEBHOOK_URL) {
+        // Send to configured webhook (Formspree, Make, n8n, etc.)
+        const response = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            ...formData,
+            _subject: `New Onboarding: ${formData.businessName}`,
+            _timestamp: new Date().toISOString(),
+          }),
+        });
 
-      if (response.ok || !response) {
-        setSubmitted(true);
+        if (!response.ok) {
+          throw new Error(`Submission failed (${response.status})`);
+        }
       }
-    } catch (error) {
-      console.error("Submission error:", error);
-      setSubmitted(true); // Still show success for UX
+      // If no webhook configured, fall through to success state anyway
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Onboarding submission error:", err);
+      setError(
+        "Something went wrong. Please try again or email us at hello@ranklocal.ca."
+      );
     } finally {
       setLoading(false);
     }
@@ -55,30 +74,50 @@ const Onboarding = () => {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-light-section flex items-center justify-center py-20">
+      <main className="min-h-screen bg-light-section flex items-center justify-center py-20 px-4">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-lg text-center"
+          className="max-w-lg w-full text-center"
         >
           <div className="mb-6">
             <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
               <CheckCircle2 size={40} className="text-primary" />
             </div>
           </div>
-          <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">You're All Set!</h1>
+          <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">
+            You're all set.
+          </h1>
           <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-            Thank you for purchasing the Local Launch Kit. We've received your information and will begin your project shortly.
+            We'll begin shortly.
           </p>
-          <div className="space-y-3">
-            <p className="text-muted-foreground text-sm">
-              You'll receive a confirmation email shortly with next steps and access to your project dashboard.
-            </p>
-            <p className="text-muted-foreground text-sm font-medium">
-              Expected start: Within 24 hours
-            </p>
+          <div className="rounded-2xl bg-card border border-border p-6 text-left space-y-3 mb-8">
+            <div className="flex items-start gap-3">
+              <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
+              <p className="text-sm text-muted-foreground">
+                Your details have been received and are in our queue.
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
+              <p className="text-sm text-muted-foreground">
+                Expect a confirmation email at <strong className="text-foreground">{formData.email}</strong> within a few minutes.
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
+              <p className="text-sm text-muted-foreground">
+                Work begins within <strong className="text-foreground">24 hours</strong>.
+              </p>
+            </div>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Questions? Email us at{" "}
+            <a href="mailto:hello@ranklocal.ca" className="text-primary hover:underline">
+              hello@ranklocal.ca
+            </a>
+          </p>
         </motion.div>
       </main>
     );
@@ -96,168 +135,216 @@ const Onboarding = () => {
           <div className="mb-12 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <Sparkles size={14} className="text-primary" />
-              <span className="text-xs font-medium text-primary tracking-wide uppercase">Onboarding</span>
+              <span className="text-xs font-medium text-primary tracking-wide uppercase">
+                Local Launch Kit — Onboarding
+              </span>
             </div>
-            <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">Let's Get You Set Up</h1>
-            <p className="text-muted-foreground text-lg">We just need a few details to get started.</p>
+            <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">
+              Let's Get You Set Up
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              We just need a few details to get started.
+            </p>
           </div>
 
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-start gap-3 rounded-xl bg-destructive/10 border border-destructive/20 p-4 mb-6"
+            >
+              <AlertCircle size={18} className="text-destructive mt-0.5 shrink-0" />
+              <p className="text-sm text-destructive">{error}</p>
+            </motion.div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Business Name */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Business Name *</label>
-              <input
-                type="text"
-                name="businessName"
-                value={formData.businessName}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="Your business name"
-              />
+            {/* ── Business Info ── */}
+            <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
+              <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
+                Business Information
+              </p>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Business Name <span className="text-primary">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="businessName"
+                  value={formData.businessName}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                  placeholder="Your business name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Website URL</label>
+                <input
+                  type="url"
+                  name="websiteUrl"
+                  value={formData.websiteUrl}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="https://yourwebsite.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Industry <span className="text-primary">*</span>
+                </label>
+                <select
+                  name="industry"
+                  value={formData.industry}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                >
+                  <option value="">Select an industry</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="hvac">HVAC</option>
+                  <option value="electrical">Electrical</option>
+                  <option value="landscaping">Landscaping</option>
+                  <option value="cleaning">Cleaning</option>
+                  <option value="roofing">Roofing</option>
+                  <option value="construction">Construction</option>
+                  <option value="marine">Marine / Boat Services</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="restaurant">Restaurant / Food</option>
+                  <option value="health">Health & Wellness</option>
+                  <option value="retail">Retail</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Primary Location / Service Area <span className="text-primary">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="primaryLocation"
+                  value={formData.primaryLocation}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                  placeholder="e.g., Toronto, ON or Georgian Bay area"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Google Business Profile Link{" "}
+                  <span className="text-muted-foreground font-normal">(if exists)</span>
+                </label>
+                <input
+                  type="url"
+                  name="googleBusinessProfile"
+                  value={formData.googleBusinessProfile}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="https://maps.google.com/..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Target Services</label>
+                <input
+                  type="text"
+                  name="targetServices"
+                  value={formData.targetServices}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="e.g., Emergency plumbing, water heater installation"
+                />
+              </div>
             </div>
 
-            {/* Website URL */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Website URL</label>
-              <input
-                type="url"
-                name="websiteUrl"
-                value={formData.websiteUrl}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="https://yourwebsite.com"
-              />
+            {/* ── Contact Info ── */}
+            <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
+              <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
+                Your Contact Details
+              </p>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Contact Name <span className="text-primary">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="contactName"
+                  value={formData.contactName}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                  placeholder="Your full name"
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Email <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className={inputClass}
+                    placeholder="your@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Phone <span className="text-primary">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className={inputClass}
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Additional Details{" "}
+                  <span className="text-muted-foreground font-normal">(optional)</span>
+                </label>
+                <textarea
+                  name="notes"
+                  value={formData.notes}
+                  onChange={handleChange}
+                  rows={4}
+                  className={inputClass}
+                  placeholder="Anything else we should know about your business or goals..."
+                />
+              </div>
             </div>
 
-            {/* Industry */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Industry *</label>
-              <select
-                name="industry"
-                value={formData.industry}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-              >
-                <option value="">Select an industry</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="hvac">HVAC</option>
-                <option value="electrical">Electrical</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="cleaning">Cleaning</option>
-                <option value="roofing">Roofing</option>
-                <option value="construction">Construction</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            {/* Primary Location */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Primary Location / Service Area *</label>
-              <input
-                type="text"
-                name="primaryLocation"
-                value={formData.primaryLocation}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="City, region, or service radius"
-              />
-            </div>
-
-            {/* Google Business Profile */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Google Business Profile Link (if exists)</label>
-              <input
-                type="url"
-                name="googleBusinessProfile"
-                value={formData.googleBusinessProfile}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="https://google.com/maps/..."
-              />
-            </div>
-
-            {/* Target Services */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Target Services</label>
-              <input
-                type="text"
-                name="targetServices"
-                value={formData.targetServices}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="e.g., Emergency plumbing, water heater installation"
-              />
-            </div>
-
-            {/* Contact Name */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Contact Name *</label>
-              <input
-                type="text"
-                name="contactName"
-                value={formData.contactName}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="Your name"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Email *</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="your@email.com"
-              />
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Phone *</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="+1 (555) 123-4567"
-              />
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">Additional Details</label>
-              <textarea
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="Any additional information about your business or goals..."
-              />
-            </div>
-
-            {/* Submit Button */}
+            {/* ── Submit ── */}
             <Button
               type="submit"
+              variant="hero"
+              size="lg"
               disabled={loading}
-              className="w-full bg-primary text-white hover:bg-primary/90 font-semibold py-3"
+              className="w-full"
             >
-              {loading ? "Submitting..." : "Complete Onboarding"} <ArrowRight size={16} />
+              {loading ? "Submitting..." : "Complete Onboarding"}{" "}
+              {!loading && <ArrowRight size={16} />}
             </Button>
 
             <p className="text-xs text-muted-foreground text-center">
-              * Required fields. We'll use this information to begin your Local Launch Kit project.
+              <span className="text-primary">*</span> Required fields. Your information is used solely to begin your Local Launch Kit project.
             </p>
           </form>
         </motion.div>

@@ -32,6 +32,7 @@ const localLaunchTiers = [
     price: "$497",
     period: "one-time",
     highlighted: false,
+    ctaHref: "/local-launch-kit",
     features: [
       "Google Business Profile setup or cleanup",
       "NAP consistency check",
@@ -45,6 +46,7 @@ const localLaunchTiers = [
     period: "one-time",
     highlighted: true,
     badge: "Most Popular",
+    ctaHref: "/local-launch-kit",
     features: [
       "Full GBP optimization",
       "30–50 citation submissions",
@@ -234,6 +236,7 @@ interface TierCardProps {
   highlighted: boolean;
   badge?: string;
   pricePrefix?: string;
+  ctaHref?: string;
 }
 
 const TierCard = ({
@@ -244,6 +247,7 @@ const TierCard = ({
   highlighted,
   badge,
   pricePrefix,
+  ctaHref = "/local-launch-kit",
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
@@ -292,7 +296,7 @@ const TierCard = ({
       className="w-full"
       asChild
     >
-      <Link to="/contact">
+      <Link to={ctaHref}>
         Get Started <ArrowRight size={14} />
       </Link>
     </Button>
@@ -541,17 +545,23 @@ const Pricing = () => (
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
           <div className="relative z-10">
             <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5">
-              Not sure what you need?
+              Ready to get started?
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto mb-10 text-base leading-relaxed">
-              Book a free strategy call. We'll review your business, identify
-              the biggest opportunities, and recommend the right plan for you.
+              Start with the Local Launch Kit — our proven entry point for local businesses. Purchase online, complete onboarding, and we’ll begin within 24 hours.
             </p>
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/contact">
-                Book Strategy Call <ArrowRight size={16} />
-              </Link>
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button variant="hero" size="lg" asChild>
+                <Link to="/local-launch-kit">
+                  Get Started <ArrowRight size={16} />
+                </Link>
+              </Button>
+              <Button variant="hero-outline" size="lg" asChild>
+                <Link to="/contact">
+                  Book Strategy Call
+                </Link>
+              </Button>
+            </div>
           </div>
         </motion.div>
       </div>
