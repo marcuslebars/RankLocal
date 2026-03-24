@@ -337,13 +337,13 @@ const Pricing = () => (
             found, generate leads, and grow.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/contact">
-                Book Strategy Call <ArrowRight size={16} />
+            <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+              <Link to="/local-launch-kit">
+                Get Started <ArrowRight size={16} />
               </Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
-              <Link to="/contact">Start a Project</Link>
+              <Link to="/case-study-a1-marine-care">View Case Study</Link>
             </Button>
           </div>
         </motion.div>

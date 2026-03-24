@@ -54,7 +54,7 @@ const LocalLaunchKit = () => (
           </p>
           <div className="flex flex-wrap gap-4">
             <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-              <Link to="/contact">Get Started <ArrowRight size={16} /></Link>
+              <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
               <Link to="/case-study-a1-marine-care">View Case Study</Link>
@@ -101,9 +101,9 @@ const LocalLaunchKit = () => (
                 </div>
               </div>
               <div className="mt-8">
-                <Button variant="outline" size="lg" asChild>
-                  <Link to="/case-study-a1-marine-care">See How It Worked <ArrowRight size={16} /></Link>
-                </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
+              </Button>
               </div>
             </div>
             <div className="relative rounded-2xl bg-gradient-to-br from-[#00FFFF]/10 to-transparent border border-[#00FFFF]/20 p-8 text-center">
@@ -243,7 +243,7 @@ const LocalLaunchKit = () => (
               </div>
             </div>
             <Button variant="hero" size="lg" className="w-full bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-              <Link to="/contact">Get Started <ArrowRight size={16} /></Link>
+              <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
             </Button>
           </div>
         </motion.div>
@@ -267,7 +267,7 @@ const LocalLaunchKit = () => (
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
-                <Link to="/contact">Get Started <ArrowRight size={16} /></Link>
+                <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>
                 <Link to="/case-study-a1-marine-care">View Case Study</Link>

@@ -118,13 +118,18 @@ const Services = () => (
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40V0h40' fill='none' stroke='white' stroke-width='0.5'/%3E%3C/svg%3E\")" }} />
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
           <div className="relative z-10">
-            <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5 text-dark-foreground">Not sure which service you need?</h2>
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-5 text-dark-foreground">Ready to Get Started?</h2>
             <p className="text-dark-foreground/50 max-w-lg mx-auto mb-10 text-base leading-relaxed">
-              Book a free strategy call. We'll audit your presence and recommend exactly what will move the needle for your business.
+              Start with the Local Launch Kit — our proven system for building local search visibility and generating consistent leads.
             </p>
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/contact">Book a Strategy Call <ArrowRight size={16} /></Link>
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+                <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
+              </Button>
+              <Button variant="hero-outline" size="lg" asChild>
+                <Link to="/contact">Book a Strategy Call</Link>
+              </Button>
+            </div>
           </div>
         </motion.div>
       </div>

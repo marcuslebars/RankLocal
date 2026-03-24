@@ -42,9 +42,12 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden md:block">
-          <Button variant="hero" size="default" asChild>
-            <Link to="/contact">Book a Strategy Call</Link>
+        <div className="hidden md:flex items-center gap-3">
+          <Button variant="hero" size="default" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+            <Link to="/local-launch-kit">Get Started</Link>
+          </Button>
+          <Button variant="hero-outline" size="default" asChild>
+            <Link to="/contact">Book a Call</Link>
           </Button>
         </div>
 
@@ -75,11 +78,18 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Button variant="hero" size="default" className="w-full" asChild>
-            <Link to="/contact" onClick={() => setMobileOpen(false)}>
-              Book a Strategy Call
-            </Link>
-          </Button>
+          <div className="space-y-2">
+            <Button variant="hero" size="default" className="w-full bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+              <Link to="/local-launch-kit" onClick={() => setMobileOpen(false)}>
+                Get Started
+              </Link>
+            </Button>
+            <Button variant="hero-outline" size="default" className="w-full" asChild>
+              <Link to="/contact" onClick={() => setMobileOpen(false)}>
+                Book a Call
+              </Link>
+            </Button>
+          </div>
         </div>
       )}
     </nav>
