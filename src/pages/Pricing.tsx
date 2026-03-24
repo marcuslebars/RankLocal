@@ -251,10 +251,10 @@ const TierCard = ({
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
-    className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 text-card-foreground ${
+    className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 ${
       highlighted
-        ? "border-2 border-primary bg-primary/[0.04] shadow-lg shadow-primary/5 scale-[1.02]"
-        : "border border-border bg-card hover:border-primary/30"
+        ? "border-2 border-primary bg-primary/[0.04] shadow-lg shadow-primary/5 scale-[1.02] text-foreground"
+        : "border border-border bg-card hover:border-primary/30 text-card-foreground"
     } card-lift`}
   >
     {badge && (
@@ -266,15 +266,21 @@ const TierCard = ({
       </div>
     )}
     <div className="mb-5">
-      <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground mb-3">
+      <p className={`font-display font-semibold text-sm uppercase tracking-[0.12em] mb-3 ${
+        highlighted ? "text-foreground/70" : "text-muted-foreground"
+      }`}>
         {name}
       </p>
       {pricePrefix && (
-        <p className="text-xs text-muted-foreground mb-1">{pricePrefix}</p>
+        <p className={`text-xs mb-1 ${
+          highlighted ? "text-foreground/60" : "text-muted-foreground"
+        }`}>{pricePrefix}</p>
       )}
       <div className="flex items-baseline gap-1">
         <span className="font-display font-extrabold text-3xl">{price}</span>
-        <span className="text-sm text-muted-foreground">{period}</span>
+        <span className={`text-sm ${
+          highlighted ? "text-foreground/60" : "text-muted-foreground"
+        }`}>{period}</span>
       </div>
     </div>
     <ul className="space-y-3 mb-7 flex-1">
@@ -286,7 +292,9 @@ const TierCard = ({
               highlighted ? "text-primary" : "text-primary/70"
             }`}
           />
-          <span className="text-sm leading-relaxed">{f}</span>
+          <span className={`text-sm leading-relaxed ${
+            highlighted ? "text-foreground/80" : ""
+          }`}>{f}</span>
         </li>
       ))}
     </ul>
