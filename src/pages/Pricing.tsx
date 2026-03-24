@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { redirectToCheckout } from "@/config/stripe";
 import {
   ArrowRight,
   CheckCircle2,
@@ -236,7 +237,7 @@ interface TierCardProps {
   highlighted: boolean;
   badge?: string;
   pricePrefix?: string;
-  ctaHref?: string;
+  isCheckout?: boolean;
 }
 
 const TierCard = ({
@@ -247,7 +248,7 @@ const TierCard = ({
   highlighted,
   badge,
   pricePrefix,
-  ctaHref = "/local-launch-kit",
+  isCheckout = false,
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
@@ -298,16 +299,27 @@ const TierCard = ({
         </li>
       ))}
     </ul>
-    <Button
-      variant={highlighted ? "hero" : "hero-dark"}
-      size="default"
-      className="w-full"
-      asChild
-    >
-      <Link to={ctaHref}>
+    {isCheckout ? (
+      <Button
+        variant={highlighted ? "hero" : "hero-dark"}
+        size="default"
+        className="w-full"
+        onClick={redirectToCheckout}
+      >
         Get Started <ArrowRight size={14} />
-      </Link>
-    </Button>
+      </Button>
+    ) : (
+      <Button
+        variant={highlighted ? "hero" : "hero-dark"}
+        size="default"
+        className="w-full"
+        asChild
+      >
+        <Link to="/local-launch-kit">
+          Get Started <ArrowRight size={14} />
+        </Link>
+      </Button>
+    )}
   </motion.div>
 );
 
@@ -387,7 +399,7 @@ const Pricing = () => (
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {localLaunchTiers.map((tier) => (
-              <TierCard key={tier.name} {...tier} />
+              <TierCard key={tier.name} {...tier} isCheckout={true} />
             ))}
           </div>
         </motion.div>
