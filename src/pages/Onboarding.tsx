@@ -63,8 +63,8 @@ const Onboarding = () => {
           className="max-w-lg text-center"
         >
           <div className="mb-6">
-            <div className="w-20 h-20 rounded-full bg-[#00FFFF]/10 flex items-center justify-center mx-auto">
-              <CheckCircle2 size={40} className="text-[#00FFFF]" />
+            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+              <CheckCircle2 size={40} className="text-primary" />
             </div>
           </div>
           <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">You're All Set!</h1>
@@ -94,9 +94,9 @@ const Onboarding = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="mb-12 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00FFFF]/10 border border-[#00FFFF]/20 mb-6">
-              <Sparkles size={14} className="text-[#00FFFF]" />
-              <span className="text-xs font-medium text-[#00FFFF] tracking-wide uppercase">Onboarding</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <Sparkles size={14} className="text-primary" />
+              <span className="text-xs font-medium text-primary tracking-wide uppercase">Onboarding</span>
             </div>
             <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">Let's Get You Set Up</h1>
             <p className="text-muted-foreground text-lg">We just need a few details to get started.</p>
@@ -112,7 +112,7 @@ const Onboarding = () => {
                 value={formData.businessName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="Your business name"
               />
             </div>
@@ -125,7 +125,7 @@ const Onboarding = () => {
                 name="websiteUrl"
                 value={formData.websiteUrl}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="https://yourwebsite.com"
               />
             </div>
@@ -138,7 +138,7 @@ const Onboarding = () => {
                 value={formData.industry}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <option value="">Select an industry</option>
                 <option value="plumbing">Plumbing</option>
@@ -161,7 +161,7 @@ const Onboarding = () => {
                 value={formData.primaryLocation}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="City, region, or service radius"
               />
             </div>
@@ -174,7 +174,7 @@ const Onboarding = () => {
                 name="googleBusinessProfile"
                 value={formData.googleBusinessProfile}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="https://google.com/maps/..."
               />
             </div>
@@ -187,7 +187,7 @@ const Onboarding = () => {
                 name="targetServices"
                 value={formData.targetServices}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="e.g., Emergency plumbing, water heater installation"
               />
             </div>
@@ -201,7 +201,7 @@ const Onboarding = () => {
                 value={formData.contactName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="Your name"
               />
             </div>
@@ -215,7 +215,7 @@ const Onboarding = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="your@email.com"
               />
             </div>
@@ -229,7 +229,7 @@ const Onboarding = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="+1 (555) 123-4567"
               />
             </div>
@@ -242,7 +242,7 @@ const Onboarding = () => {
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#00FFFF]/50"
+                className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="Any additional information about your business or goals..."
               />
             </div>
@@ -251,7 +251,7 @@ const Onboarding = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90 font-semibold py-3"
+              className="w-full bg-primary text-white hover:bg-primary/90 font-semibold py-3"
             >
               {loading ? "Submitting..." : "Complete Onboarding"} <ArrowRight size={16} />
             </Button>

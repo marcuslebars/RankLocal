@@ -37,23 +37,23 @@ const processSteps = [
 ];
 
 const LocalLaunchKit = () => (
-  <main className="selection:bg-[#00FFFF]/30">
+  <main>
     {/* HERO SECTION */}
     <section className="bg-dark-section relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-24">
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60V0h60' fill='none' stroke='white' stroke-width='0.4'/%3E%3C/svg%3E\")" }} />
-      <div className="absolute top-20 left-0 w-[500px] h-[500px] bg-[#00FFFF]/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute top-20 left-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[150px]" />
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00FFFF]/10 border border-[#00FFFF]/20 mb-6">
-            <Sparkles size={14} className="text-[#00FFFF]" />
-            <span className="text-xs font-medium text-[#00FFFF] tracking-wide uppercase">Local Launch Kit (Pro)</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            <Sparkles size={14} className="text-primary" />
+            <span className="text-xs font-medium text-primary tracking-wide uppercase">Local Launch Kit (Pro)</span>
           </div>
           <h1 className="font-display font-extrabold text-4xl md:text-5xl lg:text-[3.25rem] leading-[1.1] mb-6">Get Found Locally. Start Generating Leads.</h1>
           <p className="text-dark-foreground/60 text-lg leading-relaxed max-w-2xl mb-10">
-            We used this exact system to grow A1 Marine Care to <span className="text-[#00FFFF] font-bold">~$300,000 in its first 7 months</span>. Now we apply it to your business.
+            We used this exact system to grow A1 Marine Care to <span className="text-primary font-bold">~$300,000 in its first 7 months</span>. Now we apply it to your business.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+            <Button variant="hero" size="lg" asChild>
               <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
@@ -72,28 +72,28 @@ const LocalLaunchKit = () => (
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="rounded-2xl bg-card border-2 border-[#00FFFF]/20 p-8 lg:p-12"
+          className="rounded-2xl bg-card border-2 border-primary/20 p-8 lg:p-12"
         >
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="font-display font-extrabold text-2xl md:text-3xl mb-6">This System Works</h2>
               <div className="space-y-4">
                 <div className="flex gap-3">
-                  <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm mb-1">Built in 2025</p>
                     <p className="text-muted-foreground text-sm">First year in business</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm mb-1">~$300,000 in 7 Months</p>
                     <p className="text-muted-foreground text-sm">Revenue generated in first 7 months</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm mb-1">Driven by Local Search</p>
                     <p className="text-muted-foreground text-sm">Dominant rankings created the lead flow</p>
@@ -101,12 +101,12 @@ const LocalLaunchKit = () => (
                 </div>
               </div>
               <div className="mt-8">
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
-              </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
+                </Button>
               </div>
             </div>
-            <div className="relative rounded-2xl bg-gradient-to-br from-[#00FFFF]/10 to-transparent border border-[#00FFFF]/20 p-8 text-center">
+            <div className="relative rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 p-8 text-center">
               <div className="text-6xl mb-4">📊</div>
               <p className="text-dark-foreground/70 text-sm leading-relaxed">
                 This isn't theory. This is a real business, real results, real revenue. And we can apply the same system to yours.
@@ -130,7 +130,7 @@ const LocalLaunchKit = () => (
           {deliverables.map((item, i) => (
             <motion.div key={i} variants={fadeUp} className="glass-card rounded-2xl p-6 lg:p-8 border border-border/10">
               <div className="flex items-start gap-3 mb-4">
-                <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-1" />
+                <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-1" />
                 <h3 className="font-display font-semibold text-lg text-dark-foreground">{item.title}</h3>
               </div>
               <p className="text-dark-foreground/60 text-sm leading-relaxed">{item.description}</p>
@@ -153,8 +153,8 @@ const LocalLaunchKit = () => (
           {outcomes.map((item, i) => (
             <motion.div key={i} variants={fadeUp} className="rounded-2xl bg-card border border-border p-8">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-lg bg-[#00FFFF]/10 border border-[#00FFFF]/20 flex items-center justify-center flex-shrink-0">
-                  <Zap size={20} className="text-[#00FFFF]" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                  <Zap size={20} className="text-primary" />
                 </div>
                 <div>
                   <h3 className="font-display font-semibold text-lg mb-2">{item.title}</h3>
@@ -174,7 +174,7 @@ const LocalLaunchKit = () => (
         <div className="grid md:grid-cols-2 gap-6 max-w-2xl">
           {whoItIsFor.map((item, i) => (
             <div key={i} className="flex gap-3">
-              <CheckCircle2 size={20} className="text-[#00FFFF] flex-shrink-0 mt-0.5" />
+              <CheckCircle2 size={20} className="text-primary flex-shrink-0 mt-0.5" />
               <p className="text-dark-foreground/80 text-base">{item}</p>
             </div>
           ))}
@@ -195,8 +195,8 @@ const LocalLaunchKit = () => (
           {processSteps.map((step, i) => (
             <motion.div key={i} variants={fadeUp} className="relative">
               <div className="rounded-2xl bg-card border border-border p-8">
-                <div className="w-12 h-12 rounded-full bg-[#00FFFF]/10 border-2 border-[#00FFFF] flex items-center justify-center mb-4">
-                  <span className="font-display font-bold text-lg text-[#00FFFF]">{step.number}</span>
+                <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-4">
+                  <span className="font-display font-bold text-lg text-primary">{step.number}</span>
                 </div>
                 <h3 className="font-display font-semibold text-lg mb-3">{step.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
@@ -222,27 +222,27 @@ const LocalLaunchKit = () => (
           className="max-w-2xl mx-auto text-center"
         >
           <h2 className="font-display font-extrabold text-3xl md:text-4xl lg:text-5xl mb-8">Simple Pricing</h2>
-          <div className="rounded-3xl bg-card border-2 border-[#00FFFF]/20 p-12">
+          <div className="rounded-3xl bg-card border-2 border-primary/20 p-12">
             <h3 className="font-display font-bold text-2xl mb-4">Local Launch Kit (Pro)</h3>
             <div className="mb-8">
-              <span className="font-display font-extrabold text-5xl text-[#00FFFF]">$997</span>
+              <span className="font-display font-extrabold text-5xl text-primary">$997</span>
               <p className="text-muted-foreground text-sm mt-2">One-time investment</p>
             </div>
             <div className="space-y-3 mb-8 text-left">
               <div className="flex gap-3">
-                <Shield size={16} className="text-[#00FFFF] flex-shrink-0 mt-1" />
+                <Shield size={16} className="text-primary flex-shrink-0 mt-1" />
                 <p className="text-muted-foreground text-sm">No long-term contracts</p>
               </div>
               <div className="flex gap-3">
-                <Shield size={16} className="text-[#00FFFF] flex-shrink-0 mt-1" />
+                <Shield size={16} className="text-primary flex-shrink-0 mt-1" />
                 <p className="text-muted-foreground text-sm">Clear deliverables</p>
               </div>
               <div className="flex gap-3">
-                <Shield size={16} className="text-[#00FFFF] flex-shrink-0 mt-1" />
+                <Shield size={16} className="text-primary flex-shrink-0 mt-1" />
                 <p className="text-muted-foreground text-sm">Built on proven system</p>
               </div>
             </div>
-            <Button variant="hero" size="lg" className="w-full bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+            <Button variant="hero" size="lg" className="w-full" asChild>
               <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
             </Button>
           </div>
@@ -257,16 +257,16 @@ const LocalLaunchKit = () => (
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-r from-[#00FFFF]/5 to-transparent rounded-3xl p-12 md:p-20 text-center overflow-hidden border border-[#00FFFF]/10"
+          className="relative bg-gradient-to-r from-primary/5 to-transparent rounded-3xl p-12 md:p-20 text-center overflow-hidden border border-border/10"
         >
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00FFFF]/[0.06] rounded-full blur-[120px]" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.06] rounded-full blur-[120px]" />
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="font-display font-extrabold text-3xl md:text-4xl mb-6 text-dark-foreground">Start Getting Found Today</h2>
             <p className="text-dark-foreground/60 mb-10 text-base leading-relaxed">
               Stop waiting for referrals. Stop losing leads to competitors. Apply the same system that generated ~$300,000 for A1 Marine Care in its first 7 months.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+              <Button variant="hero" size="lg" asChild>
                 <Link to="/checkout">Get Started <ArrowRight size={16} /></Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>

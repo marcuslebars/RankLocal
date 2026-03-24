@@ -123,7 +123,7 @@ const Services = () => (
               Start with the Local Launch Kit — our proven system for building local search visibility and generating consistent leads.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+              <Button variant="hero" size="lg" asChild>
                 <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
               </Button>
               <Button variant="hero-outline" size="lg" asChild>

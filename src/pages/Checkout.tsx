@@ -21,8 +21,8 @@ const Checkout = () => {
         className="text-center max-w-md"
       >
         <div className="mb-6">
-          <div className="w-16 h-16 rounded-full bg-[#00FFFF]/10 flex items-center justify-center mx-auto mb-4">
-            <div className="w-8 h-8 border-4 border-[#00FFFF] border-t-transparent rounded-full animate-spin" />
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         </div>
         <h1 className="font-display font-extrabold text-2xl md:text-3xl mb-3 text-dark-foreground">
@@ -32,7 +32,7 @@ const Checkout = () => {
           You're being redirected to complete your purchase. If you're not redirected automatically, please{" "}
           <a
             href={process.env.REACT_APP_STRIPE_CHECKOUT_URL || "#"}
-            className="text-[#00FFFF] font-semibold hover:underline"
+            className="text-primary font-semibold hover:underline"
           >
             click here
           </a>

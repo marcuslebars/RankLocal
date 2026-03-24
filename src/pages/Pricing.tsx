@@ -337,7 +337,7 @@ const Pricing = () => (
             found, generate leads, and grow.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
+            <Button variant="hero" size="lg" asChild>
               <Link to="/local-launch-kit">
                 Get Started <ArrowRight size={16} />
               </Link>
