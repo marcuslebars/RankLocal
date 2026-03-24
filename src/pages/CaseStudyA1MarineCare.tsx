@@ -375,13 +375,13 @@ const CaseStudyA1MarineCare = () => (
               <Button variant="hero" size="lg" className="bg-[#00FFFF] text-black hover:bg-[#00FFFF]/90" asChild>
                 <Link to="/local-launch-kit">Get Started <ArrowRight size={16} /></Link>
               </Button>
-              <Button variant="hero-outline" size="lg" asChild>
+              <Button variant="hero-dark" size="lg" asChild>
                 <Link to="/local-launch-kit">Apply the System</Link>
               </Button>
-              <Button variant="hero-outline" size="lg" asChild>
+              <Button variant="hero-dark" size="lg" asChild>
                 <Link to="/pricing">View Pricing</Link>
               </Button>
-              <Button variant="hero-outline" size="lg" asChild>
+              <Button variant="hero-dark" size="lg" asChild>
                 <Link to="/contact">Book Strategy Call</Link>
               </Button>
             </div>

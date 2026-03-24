@@ -303,22 +303,23 @@ const ProcessSection = () => (
 /* ─── Featured Work ─── */
 const featuredWork = [
   {
-    title: "Bloom Florist",
-    category: "Local SEO + Web Design",
-    metric: "+312% organic traffic",
-    desc: "Rebuilt their online presence from scratch — new website, optimized GBP, and a local SEO strategy that took them to #1 in Google Maps.",
+    title: "A1 Marine Care",
+    category: "Local SEO + GBP Optimization",
+    metric: "~$300k in 7 months",
+    desc: "Our founder-built proof case. Ranked #1 across Georgian Bay and generated ~$300,000 in revenue in the first 7 months. This is the exact system we now apply to other local businesses.",
+    link: "/case-study-a1-marine-care",
   },
   {
-    title: "FixRight Plumbing",
-    category: "SEO + Advertising",
-    metric: "-52% cost per lead",
-    desc: "Restructured their ad campaigns and launched a local SEO program that doubled lead volume while cutting cost per lead in half.",
+    title: "Blair's Property Maintenance",
+    category: "Local SEO + Visibility",
+    metric: "#1 Local Rankings",
+    desc: "Year-round landscaping and snow removal business in Midland, ON. Dominant local search visibility across their service area — generating consistent leads from Google Search and Maps.",
   },
   {
-    title: "Peak Fitness Studio",
-    category: "Social Media + Web",
-    metric: "+280% engagement",
-    desc: "Designed a conversion-focused website and built a social strategy that tripled engagement and drove 60% more new member sign-ups.",
+    title: "Your Business Here",
+    category: "Local SEO + Growth",
+    metric: "Ready to rank",
+    desc: "Whether you're in plumbing, landscaping, HVAC, or any local service industry, the Local Launch Kit is your entry point to local search dominance and consistent leads.",
   },
 ];
 
@@ -347,7 +348,12 @@ const FeaturedWorkSection = () => (
               <span className="text-[11px] font-bold text-primary">{w.metric}</span>
             </div>
             <h3 className="font-display font-bold text-lg mb-2">{w.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{w.desc}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{w.desc}</p>
+            {w.link && (
+              <Button variant="hero" size="sm" asChild>
+                <Link to={w.link}>View Case Study <ArrowRight size={14} /></Link>
+              </Button>
+            )}
           </div>
         </motion.div>
       ))}
