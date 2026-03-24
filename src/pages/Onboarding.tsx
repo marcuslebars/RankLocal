@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
-import { CheckCircle2, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, AlertCircle, ShieldCheck } from "lucide-react";
 
-// Webhook URL for onboarding form submissions.
-// Set VITE_ONBOARDING_WEBHOOK_URL in your .env file.
-// Compatible with Formspree, Make, n8n, Zapier, or any POST endpoint.
 const WEBHOOK_URL = import.meta.env.VITE_ONBOARDING_WEBHOOK_URL || "";
 
 const inputClass =
   "w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors";
 
 const Onboarding = () => {
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  
   const [formData, setFormData] = useState({
     businessName: "",
     websiteUrl: "",
@@ -29,6 +30,7 @@ const Onboarding = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(!!sessionId);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -45,12 +47,12 @@ const Onboarding = () => {
 
     try {
       if (WEBHOOK_URL) {
-        // Send to configured webhook (Formspree, Make, n8n, etc.)
         const response = await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
             ...formData,
+            stripe_session_id: sessionId,
             _subject: `New Onboarding: ${formData.businessName}`,
             _timestamp: new Date().toISOString(),
           }),
@@ -60,7 +62,6 @@ const Onboarding = () => {
           throw new Error(`Submission failed (${response.status})`);
         }
       }
-      // If no webhook configured, fall through to success state anyway
       setSubmitted(true);
     } catch (err) {
       console.error("Onboarding submission error:", err);
@@ -132,15 +133,34 @@ const Onboarding = () => {
           transition={{ duration: 0.5 }}
           className="max-w-2xl mx-auto"
         >
+          {showPaymentSuccess && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-12 rounded-3xl bg-primary/5 border-2 border-primary/20 p-8 text-center relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <ShieldCheck size={24} className="text-primary" />
+                </div>
+                <h2 className="font-display font-extrabold text-2xl mb-2">Payment Received — Let’s Get You Set Up</h2>
+                <p className="text-muted-foreground text-sm">Your Local Launch Kit is confirmed. Complete onboarding so we can begin.</p>
+              </div>
+            </motion.div>
+          )}
+
           <div className="mb-12 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Sparkles size={14} className="text-primary" />
-              <span className="text-xs font-medium text-primary tracking-wide uppercase">
-                Local Launch Kit — Onboarding
-              </span>
-            </div>
+            {!showPaymentSuccess && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                <Sparkles size={14} className="text-primary" />
+                <span className="text-xs font-medium text-primary tracking-wide uppercase">
+                  Local Launch Kit — Onboarding
+                </span>
+              </div>
+            )}
             <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">
-              Let's Get You Set Up
+              {showPaymentSuccess ? "Onboarding Form" : "Let's Get You Set Up"}
             </h1>
             <p className="text-muted-foreground text-lg">
               We just need a few details to get started.
@@ -159,7 +179,6 @@ const Onboarding = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* ── Business Info ── */}
             <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
               <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
                 Business Information
@@ -263,7 +282,6 @@ const Onboarding = () => {
               </div>
             </div>
 
-            {/* ── Contact Info ── */}
             <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
               <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
                 Your Contact Details
@@ -287,7 +305,7 @@ const Onboarding = () => {
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-semibold mb-2">
-                    Email <span className="text-primary">*</span>
+                    Email Address <span className="text-primary">*</span>
                   </label>
                   <input
                     type="email"
@@ -296,12 +314,12 @@ const Onboarding = () => {
                     onChange={handleChange}
                     required
                     className={inputClass}
-                    placeholder="your@email.com"
+                    placeholder="name@email.com"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-2">
-                    Phone <span className="text-primary">*</span>
+                    Phone Number <span className="text-primary">*</span>
                   </label>
                   <input
                     type="tel"
@@ -310,15 +328,14 @@ const Onboarding = () => {
                     onChange={handleChange}
                     required
                     className={inputClass}
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="(555) 000-0000"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold mb-2">
-                  Additional Details{" "}
-                  <span className="text-muted-foreground font-normal">(optional)</span>
+                  Additional Notes
                 </label>
                 <textarea
                   name="notes"
@@ -326,26 +343,26 @@ const Onboarding = () => {
                   onChange={handleChange}
                   rows={4}
                   className={inputClass}
-                  placeholder="Anything else we should know about your business or goals..."
+                  placeholder="Anything else we should know?"
                 />
               </div>
             </div>
 
-            {/* ── Submit ── */}
             <Button
               type="submit"
               variant="hero"
               size="lg"
-              disabled={loading}
               className="w-full"
+              disabled={loading}
             >
-              {loading ? "Submitting..." : "Complete Onboarding"}{" "}
-              {!loading && <ArrowRight size={16} />}
+              {loading ? (
+                "Submitting..."
+              ) : (
+                <>
+                  Submit Onboarding <ArrowRight size={18} />
+                </>
+              )}
             </Button>
-
-            <p className="text-xs text-muted-foreground text-center">
-              <span className="text-primary">*</span> Required fields. Your information is used solely to begin your Local Launch Kit project.
-            </p>
           </form>
         </motion.div>
       </SectionWrapper>

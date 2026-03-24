@@ -1,79 +1,192 @@
-import { createReadStream, existsSync } from "node:fs";
-import { stat } from "node:fs/promises";
-import http from "node:http";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import Stripe from 'stripe';
+import nodemailer from 'nodemailer';
+import { JSONFilePreset } from 'lowdb/node';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distDir = path.join(__dirname, "dist");
-const indexFile = path.join(distDir, "index.html");
-const port = Number.parseInt(process.env.PORT ?? "3000", 10);
+const port = process.env.PORT || 3000;
 
-const mimeTypes = {
-  ".css": "text/css; charset=utf-8",
-  ".gif": "image/gif",
-  ".html": "text/html; charset=utf-8",
-  ".ico": "image/x-icon",
-  ".jpeg": "image/jpeg",
-  ".jpg": "image/jpeg",
-  ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".map": "application/json; charset=utf-8",
-  ".png": "image/png",
-  ".svg": "image/svg+xml",
-  ".txt": "text/plain; charset=utf-8",
-  ".webp": "image/webp",
-  ".woff": "font/woff",
-  ".woff2": "font/woff2",
-};
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const app = express();
 
-if (!existsSync(indexFile)) {
-  throw new Error("Build output not found. Run `npm run build` before starting the server.");
-}
+// Database setup
+const defaultData = { orders: [], processedEvents: [], tasks: [] };
+const db = await JSONFilePreset('db.json', defaultData);
 
-function sendFile(response, filePath) {
-  const extension = path.extname(filePath).toLowerCase();
-  const contentType = mimeTypes[extension] ?? "application/octet-stream";
+// Middleware
+app.use(cors());
 
-  response.writeHead(200, { "Content-Type": contentType });
-  createReadStream(filePath).pipe(response);
-}
-
-function sendNotFound(response) {
-  response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-  response.end("Not found");
-}
-
-const server = http.createServer(async (request, response) => {
-  const requestUrl = new URL(request.url ?? "/", `http://${request.headers.host ?? "localhost"}`);
-  const pathname = decodeURIComponent(requestUrl.pathname);
-  const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
-  const filePath = path.normalize(path.join(distDir, relativePath));
-  const isAssetRequest = path.extname(relativePath) !== "";
-
-  if (!filePath.startsWith(distDir)) {
-    sendNotFound(response);
-    return;
-  }
+// Webhook endpoint needs raw body for signature verification
+app.post('/api/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
 
   try {
-    const fileStats = await stat(filePath);
-
-    if (fileStats.isFile()) {
-      sendFile(response, filePath);
-      return;
-    }
-  } catch {
-    if (isAssetRequest) {
-      sendNotFound(response);
-      return;
-    }
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error(`Webhook Error: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  sendFile(response, indexFile);
+  // Idempotency check
+  const alreadyProcessed = db.data.processedEvents.find(e => e.stripe_event_id === event.id);
+  if (alreadyProcessed) {
+    return res.json({ received: true, already_processed: true });
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    await handleSuccessfulCheckout(session);
+  }
+
+  // Record event as processed
+  db.data.processedEvents.push({
+    stripe_event_id: event.id,
+    processed_at: new Date().toISOString()
+  });
+  await db.write();
+
+  res.json({ received: true });
 });
 
-server.listen(port, () => {
+// Regular JSON parsing for other routes
+app.use(express.json());
+
+// Create Checkout Session
+app.post('/api/create-checkout-session', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Local Launch Kit',
+              description: 'Complete local search dominance system',
+            },
+            unit_amount: 99700, // $997.00
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/onboarding?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/local-launch-kit`,
+      metadata: {
+        product_key: 'local_launch_kit',
+        source: 'ranklocal_site',
+        funnel: 'self_serve',
+        internal_order_type: 'launch_kit',
+      },
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    res.status(500).json({ error: 'Failed to create checkout session' });
+  }
+});
+
+async function handleSuccessfulCheckout(session) {
+  console.log('Processing successful checkout for session:', session.id);
+
+  const order = {
+    id: `ord_${Date.now()}`,
+    product_key: session.metadata.product_key,
+    stripe_session_id: session.id,
+    stripe_payment_intent_id: session.payment_intent,
+    customer_email: session.customer_details.email,
+    customer_name: session.customer_details.name,
+    amount: session.amount_total / 100,
+    currency: session.currency,
+    payment_status: 'paid',
+    onboarding_status: 'pending',
+    source: session.metadata.source,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
+  // 1. Record Order
+  db.data.orders.push(order);
+
+  // 2. Create Internal Task
+  const task = {
+    id: `task_${Date.now()}`,
+    title: `Fulfill Local Launch Kit — ${order.customer_email}`,
+    type: 'fulfillment',
+    status: 'pending',
+    priority: 'high',
+    linked_order_id: order.id,
+    notes: `Product: Local Launch Kit\nSource: self-serve website\nCustomer: ${order.customer_name}\nEmail: ${order.customer_email}\nStripe Session: ${order.stripe_session_id}\nNext Action: Wait for onboarding form`,
+    created_at: new Date().toISOString(),
+  };
+  db.data.tasks.push(task);
+  await db.write();
+
+  // 3. Send Confirmation Email
+  try {
+    await sendConfirmationEmail(order);
+  } catch (error) {
+    console.error('Failed to send confirmation email:', error);
+    // Non-blocking error
+  }
+}
+
+async function sendConfirmationEmail(order) {
+  // Simple transactional email service abstraction
+  const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM_ADDRESS || 'RankLocal <growth@ranklocal.ca>',
+    to: order.customer_email,
+    subject: 'You’re In — Let’s Launch Your Local Growth System',
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to RankLocal!</h2>
+        <p>Thank you for purchasing the <strong>Local Launch Kit</strong>. We've received your payment of $${order.amount}.</p>
+        <p>The next step is to complete your onboarding so we can begin building your local growth system.</p>
+        <div style="margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/onboarding" 
+             style="background-color: #00FFFF; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Complete Your Onboarding
+          </a>
+        </div>
+        <p>Once you submit the onboarding form, our team will begin the fulfillment process immediately.</p>
+        <p>Let's grow,</p>
+        <p>The RankLocal Team</p>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log('Confirmation email sent to:', order.customer_email);
+}
+
+// Serve static files from the Vite build
+app.use(express.static(distDir));
+
+// Handle SPA routing - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distDir, 'index.html'));
+});
+
+app.listen(port, () => {
   console.log(`RankLocal server listening on port ${port}`);
 });
