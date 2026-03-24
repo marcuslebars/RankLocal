@@ -9,6 +9,21 @@ const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transi
 
 const caseStudies = [
   {
+    title: "A1 Marine Care",
+    industry: "Marine Services",
+    services: ["Local SEO", "Google Business Profile"],
+    metrics: [
+      { label: "#1 Rankings", value: "100km+" },
+      { label: "Local Visibility", value: "Dominant" },
+      { label: "Inbound Leads", value: "Consistent" },
+    ],
+    summary: "Our founder-built proof case. Before working with clients, we built and ranked our own marine services business. This is the system that became RankLocal — proven in a real, competitive market across Georgian Bay, Lake Simcoe, and Muskoka.",
+    before: "Zero online visibility, limited leads, no local search presence",
+    after: "#1 rankings across 100km radius, consistent inbound leads, dominant local presence",
+    featured: true,
+    link: "/case-study-a1-marine-care",
+  },
+  {
     title: "Bloom Florist",
     industry: "Retail / Floral",
     services: ["Local SEO", "Web Design"],
@@ -98,6 +113,13 @@ const CaseStudies = () => (
             <motion.div variants={fadeUp} className="grid lg:grid-cols-2 gap-10 lg:gap-16">
               <div>
                 <p className="text-muted-foreground leading-relaxed text-base">{cs.summary}</p>
+                {cs.link && (
+                  <div className="mt-6">
+                    <Button variant="hero-dark" size="lg" asChild>
+                      <Link to={cs.link}>View Full Case Study <ArrowRight size={16} /></Link>
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className={`rounded-2xl p-6 ${isDark ? 'glass-card' : 'bg-card border border-border'}`}>
