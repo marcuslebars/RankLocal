@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { redirectToCheckout } from "@/config/stripe";
+import { selectPackageAndRedirect } from "@/config/stripe";
 import {
   ArrowRight,
   CheckCircle2,
@@ -40,6 +40,7 @@ const localLaunchTiers = [
       "Basic citation submissions",
       "Google indexing request",
     ],
+    packageKey: "local_launch_basic",
   },
   {
     name: "Pro",
@@ -55,6 +56,7 @@ const localLaunchTiers = [
       "Full local SEO audit",
       "Custom growth strategy",
     ],
+    packageKey: "local_launch_pro",
   },
 ];
 
@@ -238,6 +240,7 @@ interface TierCardProps {
   badge?: string;
   pricePrefix?: string;
   isCheckout?: boolean;
+  packageKey?: string;
 }
 
 const TierCard = ({
@@ -249,6 +252,7 @@ const TierCard = ({
   badge,
   pricePrefix,
   isCheckout = false,
+  packageKey,
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
@@ -304,7 +308,7 @@ const TierCard = ({
         variant={highlighted ? "hero" : "hero-dark"}
         size="default"
         className="w-full"
-        onClick={redirectToCheckout}
+        onClick={() => packageKey && selectPackageAndRedirect(packageKey)}
       >
         Get Started <ArrowRight size={14} />
       </Button>

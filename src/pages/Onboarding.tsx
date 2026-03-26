@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight, Sparkles, AlertCircle, ShieldCheck } from "lucide-react";
+import { getPackageOrDefault, PACKAGES, type PackageField } from "@/config/packages";
+import { getSelectedPackageKey, clearSelectedPackage } from "@/config/stripe";
 
 const WEBHOOK_URL = import.meta.env.VITE_ONBOARDING_WEBHOOK_URL || "";
 
@@ -11,26 +13,60 @@ const inputClass =
   "w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors";
 
 const Onboarding = () => {
-  const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   
-  const [formData, setFormData] = useState({
-    businessName: "",
-    websiteUrl: "",
-    industry: "",
-    primaryLocation: "",
-    googleBusinessProfile: "",
-    targetServices: "",
-    contactName: "",
-    email: "",
-    phone: "",
-    notes: "",
+  const sessionId = searchParams.get("session_id");
+  const packageKeyFromUrl = searchParams.get("package");
+  
+  const [selectedPackage, setSelectedPackage] = useState(() => {
+    return getPackageOrDefault(packageKeyFromUrl);
+  });
+  
+  const [formData, setFormData] = useState(() => {
+    const initial: Record<string, string> = {};
+    selectedPackage.requiredFields.forEach((field) => {
+      initial[field.name] = "";
+    });
+    selectedPackage.optionalFields.forEach((field) => {
+      initial[field.name] = "";
+    });
+    return initial;
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(!!sessionId);
+
+  useEffect(() => {
+    if (!packageKeyFromUrl) {
+      const storedPackageKey = getSelectedPackageKey();
+      if (storedPackageKey && PACKAGES[storedPackageKey]) {
+        setSelectedPackage(PACKAGES[storedPackageKey]);
+        setSearchParams({ package: storedPackageKey }, { replace: true });
+      }
+    }
+  }, [packageKeyFromUrl, setSearchParams]);
+
+  useEffect(() => {
+    const newInitial: Record<string, string> = {};
+    selectedPackage.requiredFields.forEach((field) => {
+      newInitial[field.name] = "";
+    });
+    selectedPackage.optionalFields.forEach((field) => {
+      newInitial[field.name] = "";
+    });
+    setFormData((prev) => {
+      const updated = { ...newInitial };
+      Object.keys(prev).forEach((key) => {
+        if (key in newInitial) {
+          updated[key] = prev[key];
+        }
+      });
+      return updated;
+    });
+  }, [selectedPackage]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -53,7 +89,9 @@ const Onboarding = () => {
           body: JSON.stringify({
             ...formData,
             stripe_session_id: sessionId,
-            _subject: `New Onboarding: ${formData.businessName}`,
+            package_key: selectedPackage.key,
+            package_label: selectedPackage.label,
+            _subject: `New Onboarding: ${selectedPackage.label} — ${formData.businessName || formData.contactName || "New Customer"}`,
             _timestamp: new Date().toISOString(),
           }),
         });
@@ -62,6 +100,8 @@ const Onboarding = () => {
           throw new Error(`Submission failed (${response.status})`);
         }
       }
+      
+      clearSelectedPackage();
       setSubmitted(true);
     } catch (err) {
       console.error("Onboarding submission error:", err);
@@ -71,6 +111,50 @@ const Onboarding = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const renderField = (field: PackageField) => {
+    const commonProps = {
+      name: field.name,
+      value: formData[field.name] || "",
+      onChange: handleChange,
+      className: inputClass,
+      placeholder: field.placeholder,
+    };
+
+    if (field.type === "select") {
+      return (
+        <select
+          {...commonProps}
+          required={field.required}
+        >
+          <option value="">Select {field.label.toLowerCase()}</option>
+          {field.options?.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      );
+    }
+
+    if (field.type === "textarea") {
+      return (
+        <textarea
+          {...commonProps}
+          required={field.required}
+          rows={4}
+        />
+      );
+    }
+
+    return (
+      <input
+        {...commonProps}
+        type={field.type}
+        required={field.required}
+      />
+    );
   };
 
   if (submitted) {
@@ -88,10 +172,10 @@ const Onboarding = () => {
             </div>
           </div>
           <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">
-            You're all set.
+            {selectedPackage.successHeadline}
           </h1>
           <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-            We'll begin shortly.
+            {selectedPackage.successMessage}
           </p>
           <div className="rounded-2xl bg-card border border-border p-6 text-left space-y-3 mb-8">
             <div className="flex items-start gap-3">
@@ -144,8 +228,8 @@ const Onboarding = () => {
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <ShieldCheck size={24} className="text-primary" />
                 </div>
-                <h2 className="font-display font-extrabold text-2xl mb-2">Payment Received — Let’s Get You Set Up</h2>
-                <p className="text-muted-foreground text-sm">Your Local Launch Kit is confirmed. Complete onboarding so we can begin.</p>
+                <h2 className="font-display font-extrabold text-2xl mb-2">Payment Received — Let's Get Started</h2>
+                <p className="text-muted-foreground text-sm">Your {selectedPackage.label} is confirmed. Complete onboarding so we can begin.</p>
               </div>
             </motion.div>
           )}
@@ -155,15 +239,15 @@ const Onboarding = () => {
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
                 <Sparkles size={14} className="text-primary" />
                 <span className="text-xs font-medium text-primary tracking-wide uppercase">
-                  Local Launch Kit — Onboarding
+                  {selectedPackage.label} — Onboarding
                 </span>
               </div>
             )}
             <h1 className="font-display font-extrabold text-3xl md:text-4xl mb-4">
-              {showPaymentSuccess ? "Onboarding Form" : "Let's Get You Set Up"}
+              {showPaymentSuccess ? "Onboarding Form" : selectedPackage.headline}
             </h1>
             <p className="text-muted-foreground text-lg">
-              We just need a few details to get started.
+              {selectedPackage.subheadline}
             </p>
           </div>
 
@@ -179,174 +263,39 @@ const Onboarding = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
-              <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
-                Business Information
-              </p>
+            {selectedPackage.requiredFields.length > 0 && (
+              <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
+                <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
+                  Required Information
+                </p>
 
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Business Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="businessName"
-                  value={formData.businessName}
-                  onChange={handleChange}
-                  required
-                  className={inputClass}
-                  placeholder="Your business name"
-                />
+                {selectedPackage.requiredFields.map((field) => (
+                  <div key={field.name}>
+                    <label className="block text-sm font-semibold mb-2">
+                      {field.label} <span className="text-primary">*</span>
+                    </label>
+                    {renderField(field)}
+                  </div>
+                ))}
               </div>
+            )}
 
-              <div>
-                <label className="block text-sm font-semibold mb-2">Website URL</label>
-                <input
-                  type="url"
-                  name="websiteUrl"
-                  value={formData.websiteUrl}
-                  onChange={handleChange}
-                  className={inputClass}
-                  placeholder="https://yourwebsite.com"
-                />
+            {selectedPackage.optionalFields.length > 0 && (
+              <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
+                <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
+                  Optional Information
+                </p>
+
+                {selectedPackage.optionalFields.map((field) => (
+                  <div key={field.name}>
+                    <label className="block text-sm font-semibold mb-2">
+                      {field.label}
+                    </label>
+                    {renderField(field)}
+                  </div>
+                ))}
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Industry <span className="text-primary">*</span>
-                </label>
-                <select
-                  name="industry"
-                  value={formData.industry}
-                  onChange={handleChange}
-                  required
-                  className={inputClass}
-                >
-                  <option value="">Select an industry</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="hvac">HVAC</option>
-                  <option value="electrical">Electrical</option>
-                  <option value="landscaping">Landscaping</option>
-                  <option value="cleaning">Cleaning</option>
-                  <option value="roofing">Roofing</option>
-                  <option value="construction">Construction</option>
-                  <option value="marine">Marine / Boat Services</option>
-                  <option value="automotive">Automotive</option>
-                  <option value="restaurant">Restaurant / Food</option>
-                  <option value="health">Health & Wellness</option>
-                  <option value="retail">Retail</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Primary Location / Service Area <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="primaryLocation"
-                  value={formData.primaryLocation}
-                  onChange={handleChange}
-                  required
-                  className={inputClass}
-                  placeholder="e.g., Toronto, ON or Georgian Bay area"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Google Business Profile Link{" "}
-                  <span className="text-muted-foreground font-normal">(if exists)</span>
-                </label>
-                <input
-                  type="url"
-                  name="googleBusinessProfile"
-                  value={formData.googleBusinessProfile}
-                  onChange={handleChange}
-                  className={inputClass}
-                  placeholder="https://maps.google.com/..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">Target Services</label>
-                <input
-                  type="text"
-                  name="targetServices"
-                  value={formData.targetServices}
-                  onChange={handleChange}
-                  className={inputClass}
-                  placeholder="e.g., Emergency plumbing, water heater installation"
-                />
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-card border border-border p-6 space-y-5">
-              <p className="font-display font-semibold text-sm uppercase tracking-[0.12em] text-muted-foreground">
-                Your Contact Details
-              </p>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Contact Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="contactName"
-                  value={formData.contactName}
-                  onChange={handleChange}
-                  required
-                  className={inputClass}
-                  placeholder="Your full name"
-                />
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Email Address <span className="text-primary">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className={inputClass}
-                    placeholder="name@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Phone Number <span className="text-primary">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    className={inputClass}
-                    placeholder="(555) 000-0000"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Additional Notes
-                </label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                  rows={4}
-                  className={inputClass}
-                  placeholder="Anything else we should know?"
-                />
-              </div>
-            </div>
+            )}
 
             <Button
               type="submit"

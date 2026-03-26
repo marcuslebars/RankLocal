@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Sparkles, Shield, Zap } from "lucide-react";
-import { redirectToCheckout } from "@/config/stripe";
+import { selectPackageAndRedirect } from "@/config/stripe";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
@@ -54,7 +54,7 @@ const LocalLaunchKit = () => (
             We used this exact system to grow A1 Marine Care to <span className="text-primary font-bold">~$300,000 in its first 7 months</span>. Now we apply it to your business.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button variant="hero" size="lg" onClick={redirectToCheckout}>
+            <Button variant="hero" size="lg" onClick={() => selectPackageAndRedirect("local_launch_pro")}>
               Get Started <ArrowRight size={16} />
             </Button>
             <Button variant="hero-outline" size="lg" asChild>
@@ -102,9 +102,9 @@ const LocalLaunchKit = () => (
                 </div>
               </div>
               <div className="mt-8">
-                <Button variant="outline" size="lg" onClick={redirectToCheckout}>
-                  Get Started <ArrowRight size={16} />
-                </Button>
+              <Button variant="outline" size="lg" onClick={() => selectPackageAndRedirect("local_launch_pro")}>
+                Get Started <ArrowRight size={16} />
+              </Button>
               </div>
             </div>
             <div className="relative rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 p-8 text-center">
@@ -243,7 +243,7 @@ const LocalLaunchKit = () => (
                 <p className="text-muted-foreground text-sm">Built on proven system</p>
               </div>
             </div>
-            <Button variant="hero" size="lg" className="w-full" onClick={redirectToCheckout}>
+            <Button variant="hero" size="lg" className="w-full" onClick={() => selectPackageAndRedirect("local_launch_pro")}>
               Get Started <ArrowRight size={16} />
             </Button>
           </div>
@@ -267,7 +267,7 @@ const LocalLaunchKit = () => (
               Stop waiting for referrals. Stop losing leads to competitors. Apply the same system that generated ~$300,000 for A1 Marine Care in its first 7 months.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="hero" size="lg" onClick={redirectToCheckout}>
+              <Button variant="hero" size="lg" onClick={() => selectPackageAndRedirect("local_launch_pro")}>
                 Get Started <ArrowRight size={16} />
               </Button>
               <Button variant="hero-outline" size="lg" asChild>

@@ -18,6 +18,42 @@ const port = process.env.PORT || 3000;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+const PACKAGE_LABELS = {
+  local_launch_basic: 'Local Launch Kit — Basic',
+  local_launch_pro: 'Local Launch Kit — Pro',
+  website_starter: 'Website Package — Starter',
+  website_growth: 'Website Package — Growth',
+  website_pro: 'Website Package — Pro',
+  automation_starter: 'Automation Setup — Starter',
+  automation_growth: 'Automation Setup — Growth',
+  automation_scale: 'Automation Setup — Scale',
+};
+
+const PACKAGE_INTERNAL_NAMES = {
+  local_launch_basic: 'Local Launch Kit (Basic)',
+  local_launch_pro: 'Local Launch Kit (Pro)',
+  website_starter: 'Website Package (Starter)',
+  website_growth: 'Website Package (Growth)',
+  website_pro: 'Website Package (Pro)',
+  automation_starter: 'Automation Setup (Starter)',
+  automation_growth: 'Automation Setup (Growth)',
+  automation_scale: 'Automation Setup (Scale)',
+};
+
+function getPackageLabel(productKey) {
+  return PACKAGE_LABELS[productKey] || PACKAGE_LABELS.local_launch_pro;
+}
+
+function getPackageInternalName(productKey) {
+  return PACKAGE_INTERNAL_NAMES[productKey] || 'Unknown Package';
+}
+
+function getSuccessUrl(productKey) {
+  return `${SITE_URL}/onboarding?session_id={CHECKOUT_SESSION_ID}&package=${productKey}`;
+}
+
 // Database setup
 const defaultData = { orders: [], processedEvents: [], tasks: [] };
 const db = await JSONFilePreset('db.json', defaultData);
@@ -64,6 +100,10 @@ app.use(express.json());
 // Create Checkout Session
 app.post('/api/create-checkout-session', async (req, res) => {
   try {
+    const { packageKey = 'local_launch_pro' } = req.body;
+    const packageLabel = getPackageLabel(packageKey);
+    const successUrl = getSuccessUrl(packageKey);
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -71,22 +111,22 @@ app.post('/api/create-checkout-session', async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Local Launch Kit',
-              description: 'Complete local search dominance system',
+              name: packageLabel,
+              description: `RankLocal ${packageLabel} service package`,
             },
-            unit_amount: 99700, // $997.00
+            unit_amount: 99700, // This should be dynamic based on package
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/onboarding?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/local-launch-kit`,
+      success_url: successUrl,
+      cancel_url: `${SITE_URL}/local-launch-kit`,
       metadata: {
-        product_key: 'local_launch_kit',
+        product_key: packageKey,
         source: 'ranklocal_site',
         funnel: 'self_serve',
-        internal_order_type: 'launch_kit',
+        internal_order_type: packageKey,
       },
     });
 
@@ -100,9 +140,14 @@ app.post('/api/create-checkout-session', async (req, res) => {
 async function handleSuccessfulCheckout(session) {
   console.log('Processing successful checkout for session:', session.id);
 
+  const productKey = session.metadata.product_key || 'local_launch_pro';
+  const packageLabel = getPackageLabel(productKey);
+  const packageInternalName = getPackageInternalName(productKey);
+
   const order = {
     id: `ord_${Date.now()}`,
-    product_key: session.metadata.product_key,
+    product_key: productKey,
+    product_label: packageLabel,
     stripe_session_id: session.id,
     stripe_payment_intent_id: session.payment_intent,
     customer_email: session.customer_details.email,
@@ -122,12 +167,12 @@ async function handleSuccessfulCheckout(session) {
   // 2. Create Internal Task
   const task = {
     id: `task_${Date.now()}`,
-    title: `Fulfill Local Launch Kit — ${order.customer_email}`,
+    title: `Fulfill ${packageInternalName} — ${order.customer_email}`,
     type: 'fulfillment',
     status: 'pending',
     priority: 'high',
     linked_order_id: order.id,
-    notes: `Product: Local Launch Kit\nSource: self-serve website\nCustomer: ${order.customer_name}\nEmail: ${order.customer_email}\nStripe Session: ${order.stripe_session_id}\nNext Action: Wait for onboarding form`,
+    notes: `Product: ${packageLabel}\nSource: self-serve website\nCustomer: ${order.customer_name}\nEmail: ${order.customer_email}\nStripe Session: ${order.stripe_session_id}\nNext Action: Wait for onboarding form`,
     created_at: new Date().toISOString(),
   };
   db.data.tasks.push(task);
@@ -135,15 +180,14 @@ async function handleSuccessfulCheckout(session) {
 
   // 3. Send Confirmation Email
   try {
-    await sendConfirmationEmail(order);
+    await sendConfirmationEmail(order, packageLabel);
   } catch (error) {
     console.error('Failed to send confirmation email:', error);
     // Non-blocking error
   }
 }
 
-async function sendConfirmationEmail(order) {
-  // Simple transactional email service abstraction
+async function sendConfirmationEmail(order, packageLabel) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -153,17 +197,19 @@ async function sendConfirmationEmail(order) {
     },
   });
 
+  const onboardingUrl = `${SITE_URL}/onboarding?package=${order.product_key}`;
+
   const mailOptions = {
     from: process.env.EMAIL_FROM_ADDRESS || 'RankLocal <growth@ranklocal.ca>',
     to: order.customer_email,
-    subject: 'You’re In — Let’s Launch Your Local Growth System',
+    subject: `You're In — Let's Launch Your ${packageLabel}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Welcome to RankLocal!</h2>
-        <p>Thank you for purchasing the <strong>Local Launch Kit</strong>. We've received your payment of $${order.amount}.</p>
-        <p>The next step is to complete your onboarding so we can begin building your local growth system.</p>
+        <p>Thank you for purchasing the <strong>${packageLabel}</strong>. We've received your payment of $${order.amount}.</p>
+        <p>The next step is to complete your onboarding so we can begin building your growth system.</p>
         <div style="margin: 30px 0;">
-          <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/onboarding" 
+          <a href="${onboardingUrl}" 
              style="background-color: #00FFFF; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
             Complete Your Onboarding
           </a>
