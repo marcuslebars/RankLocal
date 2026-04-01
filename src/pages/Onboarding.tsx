@@ -18,9 +18,14 @@ const Onboarding = () => {
   
   const sessionId = searchParams.get("session_id");
   const packageKeyFromUrl = searchParams.get("package");
+  const packageKeyFromTracking = searchParams.get("utm_campaign");
+  const resolvedPackageKey =
+    (packageKeyFromUrl && PACKAGES[packageKeyFromUrl] && packageKeyFromUrl) ||
+    (packageKeyFromTracking && PACKAGES[packageKeyFromTracking] && packageKeyFromTracking) ||
+    getSelectedPackageKey();
   
   const [selectedPackage, setSelectedPackage] = useState(() => {
-    return getPackageOrDefault(packageKeyFromUrl);
+    return getPackageOrDefault(resolvedPackageKey);
   });
   
   const [formData, setFormData] = useState(() => {
@@ -40,14 +45,16 @@ const Onboarding = () => {
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(!!sessionId);
 
   useEffect(() => {
-    if (!packageKeyFromUrl) {
-      const storedPackageKey = getSelectedPackageKey();
-      if (storedPackageKey && PACKAGES[storedPackageKey]) {
-        setSelectedPackage(PACKAGES[storedPackageKey]);
-        setSearchParams({ package: storedPackageKey }, { replace: true });
+    if (resolvedPackageKey && PACKAGES[resolvedPackageKey]) {
+      setSelectedPackage(PACKAGES[resolvedPackageKey]);
+
+      if (packageKeyFromUrl !== resolvedPackageKey) {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set("package", resolvedPackageKey);
+        setSearchParams(nextParams, { replace: true });
       }
     }
-  }, [packageKeyFromUrl, setSearchParams]);
+  }, [packageKeyFromUrl, resolvedPackageKey, searchParams, setSearchParams]);
 
   useEffect(() => {
     const newInitial: Record<string, string> = {};

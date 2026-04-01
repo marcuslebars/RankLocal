@@ -66,6 +66,7 @@ const websiteTiers = [
     price: "$1,497",
     period: "one-time",
     highlighted: false,
+    packageKey: "website_starter",
     features: [
       "Up to 5 pages",
       "Mobile-responsive design",
@@ -81,6 +82,7 @@ const websiteTiers = [
     highlighted: true,
     badge: "Most Popular",
     whiteTextOnHighlight: true,
+    packageKey: "website_growth",
     features: [
       "Up to 10 pages",
       "Conversion-optimized layout",
@@ -95,6 +97,7 @@ const websiteTiers = [
     price: "$3,997",
     period: "one-time",
     highlighted: false,
+    packageKey: "website_pro",
     features: [
       "Unlimited pages",
       "Custom UI/UX design",
@@ -112,6 +115,7 @@ const automationTiers = [
     price: "$497",
     period: "one-time",
     highlighted: false,
+    packageKey: "automation_starter",
     features: [
       "1 automation workflow",
       "CRM or form integration",
@@ -125,6 +129,7 @@ const automationTiers = [
     period: "one-time",
     highlighted: true,
     badge: "Most Popular",
+    packageKey: "automation_growth",
     features: [
       "Up to 3 workflows",
       "Multi-tool integrations",
@@ -138,6 +143,7 @@ const automationTiers = [
     price: "$1,997",
     period: "one-time",
     highlighted: false,
+    packageKey: "automation_scale",
     features: [
       "Unlimited workflows",
       "Custom API integrations",
@@ -154,6 +160,7 @@ const growthPlans = [
     price: "$697",
     period: "/month",
     highlighted: false,
+    packageKey: "growth_starter",
     features: [
       "GBP management & optimization",
       "Monthly citation building",
@@ -169,6 +176,7 @@ const growthPlans = [
     highlighted: true,
     badge: "Most Popular",
     whiteTextOnHighlight: true,
+    packageKey: "growth_growth",
     features: [
       "Everything in Starter Growth",
       "On-page SEO & content strategy",
@@ -184,6 +192,7 @@ const growthPlans = [
     period: "/month",
     pricePrefix: "Starting at",
     highlighted: false,
+    packageKey: "growth_dominance",
     features: [
       "Everything in Growth Engine",
       "Multi-location management",
@@ -459,7 +468,7 @@ const Pricing = () => (
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {websiteTiers.map((tier) => (
-              <TierCard key={tier.name} {...tier} />
+              <TierCard key={tier.name} {...tier} isCheckout={true} />
             ))}
           </div>
         </motion.div>
@@ -491,7 +500,7 @@ const Pricing = () => (
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {automationTiers.map((tier) => (
-              <TierCard key={tier.name} {...tier} />
+              <TierCard key={tier.name} {...tier} isCheckout={true} />
             ))}
           </div>
         </motion.div>
@@ -524,7 +533,7 @@ const Pricing = () => (
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {growthPlans.map((plan) => (
-              <TierCard key={plan.name} {...plan} />
+              <TierCard key={plan.name} {...plan} isCheckout={true} />
             ))}
           </div>
         </motion.div>
