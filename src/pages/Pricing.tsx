@@ -168,6 +168,7 @@ const growthPlans = [
     period: "/month",
     highlighted: true,
     badge: "Most Popular",
+    whiteTextOnHighlight: true,
     features: [
       "Everything in Starter Growth",
       "On-page SEO & content strategy",
