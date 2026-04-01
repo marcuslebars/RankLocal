@@ -4,6 +4,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Sparkles, Shield, Zap } from "lucide-react";
 import { selectPackageAndRedirect } from "@/config/stripe";
+import localSearchGridImage from "@/assets/a1-marine-local-search-grid.png";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
@@ -107,11 +108,12 @@ const LocalLaunchKit = () => (
               </Button>
               </div>
             </div>
-            <div className="relative rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 p-8 text-center">
-              <div className="text-6xl mb-4">📊</div>
-              <p className="text-dark-foreground/70 text-sm leading-relaxed">
-                This isn't theory. This is a real business, real results, real revenue. And we can apply the same system to yours.
-              </p>
+            <div className="relative rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 p-4 lg:p-5 overflow-hidden">
+              <img
+                src={localSearchGridImage}
+                alt="A1 Marine Care local search ranking grid results"
+                className="w-full h-full rounded-xl object-cover"
+              />
             </div>
           </div>
         </motion.div>
