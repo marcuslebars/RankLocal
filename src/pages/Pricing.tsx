@@ -80,6 +80,7 @@ const websiteTiers = [
     period: "one-time",
     highlighted: true,
     badge: "Most Popular",
+    whiteTextOnHighlight: true,
     features: [
       "Up to 10 pages",
       "Conversion-optimized layout",
@@ -241,6 +242,7 @@ interface TierCardProps {
   pricePrefix?: string;
   isCheckout?: boolean;
   packageKey?: string;
+  whiteTextOnHighlight?: boolean;
 }
 
 const TierCard = ({
@@ -253,12 +255,13 @@ const TierCard = ({
   pricePrefix,
   isCheckout = false,
   packageKey,
+  whiteTextOnHighlight = false,
 }: TierCardProps) => (
   <motion.div
     variants={fadeUp}
     className={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 ${
       highlighted
-        ? "border-2 border-primary bg-primary/[0.04] shadow-lg shadow-primary/5 scale-[1.02] text-foreground"
+        ? `border-2 border-primary bg-primary/[0.04] shadow-lg shadow-primary/5 scale-[1.02] ${whiteTextOnHighlight ? "text-white" : "text-foreground"}`
         : "border border-border bg-card hover:border-primary/30 text-card-foreground"
     } card-lift`}
   >
@@ -272,19 +275,31 @@ const TierCard = ({
     )}
     <div className="mb-5">
       <p className={`font-display font-semibold text-sm uppercase tracking-[0.12em] mb-3 ${
-        highlighted ? "text-foreground/70" : "text-muted-foreground"
+        highlighted
+          ? whiteTextOnHighlight
+            ? "text-white/80"
+            : "text-foreground/70"
+          : "text-muted-foreground"
       }`}>
         {name}
       </p>
       {pricePrefix && (
         <p className={`text-xs mb-1 ${
-          highlighted ? "text-foreground/60" : "text-muted-foreground"
+          highlighted
+            ? whiteTextOnHighlight
+              ? "text-white/70"
+              : "text-foreground/60"
+            : "text-muted-foreground"
         }`}>{pricePrefix}</p>
       )}
       <div className="flex items-baseline gap-1">
         <span className="font-display font-extrabold text-3xl">{price}</span>
         <span className={`text-sm ${
-          highlighted ? "text-foreground/60" : "text-muted-foreground"
+          highlighted
+            ? whiteTextOnHighlight
+              ? "text-white/70"
+              : "text-foreground/60"
+            : "text-muted-foreground"
         }`}>{period}</span>
       </div>
     </div>
@@ -294,11 +309,19 @@ const TierCard = ({
           <CheckCircle2
             size={16}
             className={`mt-0.5 shrink-0 ${
-              highlighted ? "text-primary" : "text-primary/70"
+              highlighted
+                ? whiteTextOnHighlight
+                  ? "text-white"
+                  : "text-primary"
+                : "text-primary/70"
             }`}
           />
           <span className={`text-sm leading-relaxed ${
-            highlighted ? "text-foreground/80" : ""
+            highlighted
+              ? whiteTextOnHighlight
+                ? "text-white"
+                : "text-foreground/80"
+              : ""
           }`}>{f}</span>
         </li>
       ))}
